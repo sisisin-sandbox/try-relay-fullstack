@@ -1,0 +1,22 @@
+overwrite: true
+schema: ./src/graphql/**/*.ts
+generates:
+  src/graphql/__generated__/graphql.ts:
+    plugins:
+      - add:
+          content:
+            - "import { PartialDeep } from 'type-fest';"
+      - 'typescript'
+      - 'typescript-resolvers'
+    config:
+      useIndexSignature: true
+      defaultMapper: PartialDeep<{T}>
+      # contextType: ../helper#ResolverContext
+      federation: true
+  src/graphql/__generated__/schema.graphql:
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+      federation: true
+
