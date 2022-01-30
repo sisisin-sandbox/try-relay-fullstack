@@ -2,9 +2,9 @@ import './App.css';
 import { graphql } from 'react-relay';
 import { loadQuery, usePreloadedQuery } from 'react-relay/hooks';
 import { relayEnvironment } from './RelayEnvironment';
-import { AppQuery } from './__generated__/AppQuery.graphql';
+import type { AppQuery } from './__generated__/AppQuery.graphql';
 
-const Q = graphql`
+const operation = graphql`
   query AppQuery($id: ID!) {
     user(id: $id) {
       id
@@ -12,12 +12,12 @@ const Q = graphql`
     }
   }
 `;
-const preloadedQuery = loadQuery<AppQuery>(relayEnvironment, Q, {
+const preloadedQuery = loadQuery<AppQuery>(relayEnvironment, operation, {
   id: '1',
 });
 
 function App() {
-  const data = usePreloadedQuery(Q, preloadedQuery);
+  const data = usePreloadedQuery(operation, preloadedQuery);
 
   return (
     <div className="App">
