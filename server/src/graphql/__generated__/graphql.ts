@@ -24,8 +24,7 @@ export type Mutation = {
 
 
 export type MutationPostCreateArgs = {
-  body: Scalars['String'];
-  title: Scalars['String'];
+  input: PostCreateInput;
 };
 
 
@@ -54,6 +53,11 @@ export type PostConnection = {
   __typename?: 'PostConnection';
   edges: Array<Maybe<PostEdge>>;
   pageInfo: PageInfo;
+};
+
+export type PostCreateInput = {
+  body: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type PostCreatePayload = {
@@ -178,6 +182,7 @@ export type ResolversTypes = ResolversObject<{
   Post: ResolverTypeWrapper<PartialDeep<Post>>;
   ID: ResolverTypeWrapper<PartialDeep<Scalars['ID']>>;
   PostConnection: ResolverTypeWrapper<PartialDeep<PostConnection>>;
+  PostCreateInput: ResolverTypeWrapper<PartialDeep<PostCreateInput>>;
   PostCreatePayload: ResolverTypeWrapper<PartialDeep<PostCreatePayload>>;
   PostEdge: ResolverTypeWrapper<PartialDeep<PostEdge>>;
   Query: ResolverTypeWrapper<{}>;
@@ -195,6 +200,7 @@ export type ResolversParentTypes = ResolversObject<{
   Post: PartialDeep<Post>;
   ID: PartialDeep<Scalars['ID']>;
   PostConnection: PartialDeep<PostConnection>;
+  PostCreateInput: PartialDeep<PostCreateInput>;
   PostCreatePayload: PartialDeep<PostCreatePayload>;
   PostEdge: PartialDeep<PostEdge>;
   Query: {};
@@ -204,7 +210,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  postCreate?: Resolver<Maybe<ResolversTypes['PostCreatePayload']>, ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'body' | 'title'>>;
+  postCreate?: Resolver<Maybe<ResolversTypes['PostCreatePayload']>, ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   userCreate?: Resolver<Maybe<ResolversTypes['UserCreatePayload']>, ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'name'>>;
 }>;
 

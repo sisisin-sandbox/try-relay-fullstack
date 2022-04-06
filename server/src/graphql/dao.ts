@@ -4,12 +4,18 @@ const dataPath = path.resolve(__dirname, '../data');
 const seedsPath = path.resolve(__dirname, '../seeds');
 
 const tables = ['users', 'posts'] as const;
-
-const db: {
-  users: User[];
-  posts: Post[];
-} = { users: [], posts: [] };
-
+const db = new (class {
+  private getByName(name: string) {
+    const data = path.resolve(dataPath, `${name}.json`);
+    return fs.readFile(data).then((data) => JSON.parse(data.toString()));
+  }
+  users(): Promise<User[]> {
+    return this.getByName('users');
+  }
+  posts(): Promise<Post[]> {
+    return this.getByName('posts');
+  }
+})();
 export const initDb = async () => {
   for (const table of tables) {
     const name = `${table}.json`;
@@ -19,7 +25,6 @@ export const initDb = async () => {
       () => {},
       () => fs.copyFile(seed, data),
     );
-    db[table] = await fs.readFile(data).then((data) => JSON.parse(data.toString()));
   }
 };
 
@@ -33,7 +38,7 @@ export type User = {
 export const userDao = new (class {
   async findById(id: string): Promise<User> {
     await randomDelay();
-    return db.users.find((u) => u.id === id)!;
+    return (await db.users()).find((u) => u.id === id)!;
   }
   async findMany() {
     return db.users;
@@ -52,19 +57,20 @@ type Post = {
 export const postDao = new (class {
   async findById(id: string): Promise<Post> {
     await randomDelay();
-    return db.posts.find((p) => p.id === id)!;
+    return (await db.posts()).find((p) => p.id === id)!;
   }
   async findMany(): Promise<Post[]> {
-    return db.posts;
+    return db.posts();
   }
   async create(authorId: string, title: string, body: string): Promise<Post> {
+    const posts = await db.posts();
     const post = {
-      id: (+db.posts[db.posts.length - 1].id + 1).toString(),
+      id: (+posts[posts.length - 1].id + 1).toString(),
       userId: authorId,
       title,
       body,
     };
-    const newPosts = [...db.posts, post];
+    const newPosts = [...posts, post];
     console.log(newPosts);
     await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
     return post;

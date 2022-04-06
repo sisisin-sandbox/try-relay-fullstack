@@ -14,7 +14,7 @@ directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
 scalar _FieldSet
 
 type Mutation {
-  postCreate(body: String!, title: String!): PostCreatePayload
+  postCreate(input: PostCreateInput!): PostCreatePayload
   userCreate(name: String!): UserCreatePayload
 }
 
@@ -36,6 +36,11 @@ type Post {
 type PostConnection {
   edges: [PostEdge]!
   pageInfo: PageInfo!
+}
+
+input PostCreateInput {
+  body: String!
+  title: String!
 }
 
 type PostCreatePayload {

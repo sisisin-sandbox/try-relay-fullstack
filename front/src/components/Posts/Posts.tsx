@@ -5,6 +5,7 @@ import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
 import { PostsQuery } from './__generated__/PostsQuery.graphql';
 import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
 import { PostList } from './PostList';
+import { Link } from 'react-router-dom';
 
 const operation = graphql`
   query PostsQuery {
@@ -20,6 +21,9 @@ const Content = ({ refresh, queryRef }: Props) => {
     <div className="App">
       <div>
         <PostList queryRef={data}></PostList>
+      </div>
+      <div>
+        <Link to="/posts/new">new post</Link>
       </div>
       <Links></Links>
     </div>

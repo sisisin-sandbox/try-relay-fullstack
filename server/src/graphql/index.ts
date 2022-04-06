@@ -94,6 +94,7 @@ const postQuery: SchemaModule = {
     Query: {
       postById: async (source, args, context, info) => {
         const post = await postDao.findById(args.postId);
+        console.log({ ...post, postId: post.id, id: toGlobalId('Post', post.id) });
         return { ...post, postId: post.id, id: toGlobalId('Post', post.id) };
       },
       posts: async (source, args, context, info) => {
@@ -116,7 +117,11 @@ const postQuery: SchemaModule = {
 const postMutation: SchemaModule = {
   typeDefs: gql`
     extend type Mutation {
-      postCreate(title: String!, body: String!): PostCreatePayload
+      postCreate(input: PostCreateInput!): PostCreatePayload
+    }
+    input PostCreateInput {
+      title: String!
+      body: String!
     }
     type PostCreatePayload {
       post: Post!
@@ -125,7 +130,7 @@ const postMutation: SchemaModule = {
   resolvers: {
     Mutation: {
       postCreate: async (source, args, context, info) => {
-        const post = await postDao.create(context.sessionUser.id, args.title, args.body);
+        const post = await postDao.create(context.sessionUser.id, args.input.title, args.input.body);
         return {
           post: { ...post, postId: post.id, id: toGlobalId('Post', post.id) },
         };
