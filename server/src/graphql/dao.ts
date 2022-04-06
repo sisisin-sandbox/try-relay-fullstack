@@ -71,7 +71,6 @@ export const postDao = new (class {
       body,
     };
     const newPosts = [...posts, post];
-    console.log(newPosts);
     await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
     return post;
   }

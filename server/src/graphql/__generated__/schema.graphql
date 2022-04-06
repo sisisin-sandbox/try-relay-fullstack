@@ -18,6 +18,10 @@ type Mutation {
   userCreate(name: String!): UserCreatePayload
 }
 
+interface Node {
+  id: ID!
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -25,7 +29,7 @@ type PageInfo {
   startCursor: String
 }
 
-type Post {
+type Post implements Node {
   body: String!
   id: ID!
   postId: String!
@@ -45,6 +49,7 @@ input PostCreateInput {
 
 type PostCreatePayload {
   post: Post!
+  postEdge: PostEdge!
 }
 
 type PostEdge {
@@ -53,6 +58,7 @@ type PostEdge {
 }
 
 type Query {
+  node(id: ID!): Node
   postById(postId: String!): Post
   posts(first: Int! = 30): PostConnection!
   user(id: ID!): User

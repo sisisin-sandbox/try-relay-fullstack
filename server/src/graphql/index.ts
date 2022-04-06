@@ -21,8 +21,36 @@ const base: SchemaModule = {
       startCursor: String
       endCursor: String
     }
+
+    interface Node {
+      id: ID!
+    }
   `,
 };
+
+const nodeQuery: SchemaModule = {
+  typeDefs: gql`
+    extend type Query {
+      node(id: ID!): Node
+    }
+  `,
+  resolvers: {
+    Query: {
+      node: async (source, args, context, info) => {
+        const { id, type } = fromGlobalId(args.id);
+        switch (type) {
+          case 'User':
+            return await userDao.findById(id);
+          case 'Post':
+            return await postDao.findById(id);
+          default:
+            return null;
+        }
+      },
+    },
+  },
+};
+
 const userQuery: SchemaModule = {
   typeDefs: gql`
     type User {
@@ -67,7 +95,7 @@ const userMutation: SchemaModule = {
 };
 const postQuery: SchemaModule = {
   typeDefs: gql`
-    type Post {
+    type Post implements Node {
       id: ID!
       postId: String!
       userId: String!
@@ -94,7 +122,6 @@ const postQuery: SchemaModule = {
     Query: {
       postById: async (source, args, context, info) => {
         const post = await postDao.findById(args.postId);
-        console.log({ ...post, postId: post.id, id: toGlobalId('Post', post.id) });
         return { ...post, postId: post.id, id: toGlobalId('Post', post.id) };
       },
       posts: async (source, args, context, info) => {
@@ -125,21 +152,27 @@ const postMutation: SchemaModule = {
     }
     type PostCreatePayload {
       post: Post!
+      postEdge: PostEdge!
     }
   `,
   resolvers: {
     Mutation: {
       postCreate: async (source, args, context, info) => {
-        const post = await postDao.create(context.sessionUser.id, args.input.title, args.input.body);
+        const postFromDB = await postDao.create(context.sessionUser.id, args.input.title, args.input.body);
+        const post = { ...postFromDB, postId: postFromDB.id, id: toGlobalId('Post', postFromDB.id) };
         return {
-          post: { ...post, postId: post.id, id: toGlobalId('Post', post.id) },
+          post,
+          postEdge: {
+            cursor: post.id,
+            node: post,
+          },
         };
       },
     },
   },
 };
 
-const schemaModules: SchemaModule[] = [base, userQuery, userMutation, postQuery, postMutation];
+const schemaModules: SchemaModule[] = [base, nodeQuery, userQuery, userMutation, postQuery, postMutation];
 
 type AppContext = ExpressContext & { sessionUser: User };
 export const createServer = async () => {

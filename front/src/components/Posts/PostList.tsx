@@ -36,7 +36,7 @@ export const PostList = ({ queryRef }: Props) => {
             return (
               <li key={node.id}>
                 <Link to={`/posts/${node.postId}`}>
-                  User: {node.userId},title: {node.title}
+                  id: {node.postId},title: {node.title}
                 </Link>
               </li>
             );
