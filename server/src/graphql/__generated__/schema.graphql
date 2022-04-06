@@ -1,5 +1,6 @@
 schema {
   query: Query
+  mutation: Mutation
 }
 
 directive @external on FIELD_DEFINITION
@@ -12,11 +13,52 @@ directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
 
 scalar _FieldSet
 
+type Mutation {
+  postCreate(body: String!, title: String!): PostCreatePayload
+  userCreate(name: String!): UserCreatePayload
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type Post {
+  body: String!
+  id: ID!
+  postId: String!
+  title: String!
+  userId: String!
+}
+
+type PostConnection {
+  edges: [PostEdge]!
+  pageInfo: PageInfo!
+}
+
+type PostCreatePayload {
+  post: Post!
+}
+
+type PostEdge {
+  cursor: String!
+  node: Post!
+}
+
 type Query {
+  postById(id: ID!): Post
+  posts: PostConnection!
   user(id: ID!): User
 }
 
 type User {
   id: ID!
   name: String!
+  userId: String!
+}
+
+type UserCreatePayload {
+  user: User!
 }

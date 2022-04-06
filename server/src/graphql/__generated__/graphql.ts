@@ -16,9 +16,67 @@ export type Scalars = {
   _FieldSet: any;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  postCreate?: Maybe<PostCreatePayload>;
+  userCreate?: Maybe<UserCreatePayload>;
+};
+
+
+export type MutationPostCreateArgs = {
+  body: Scalars['String'];
+  title: Scalars['String'];
+};
+
+
+export type MutationUserCreateArgs = {
+  name: Scalars['String'];
+};
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  body: Scalars['String'];
+  id: Scalars['ID'];
+  postId: Scalars['String'];
+  title: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type PostConnection = {
+  __typename?: 'PostConnection';
+  edges: Array<Maybe<PostEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type PostCreatePayload = {
+  __typename?: 'PostCreatePayload';
+  post: Post;
+};
+
+export type PostEdge = {
+  __typename?: 'PostEdge';
+  cursor: Scalars['String'];
+  node: Post;
+};
+
 export type Query = {
   __typename?: 'Query';
+  postById?: Maybe<Post>;
+  posts: PostConnection;
   user?: Maybe<User>;
+};
+
+
+export type QueryPostByIdArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -30,6 +88,12 @@ export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   name: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type UserCreatePayload = {
+  __typename?: 'UserCreatePayload';
+  user: User;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -102,34 +166,102 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Query: ResolverTypeWrapper<{}>;
-  ID: ResolverTypeWrapper<PartialDeep<Scalars['ID']>>;
-  User: ResolverTypeWrapper<PartialDeep<User>>;
+  Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<PartialDeep<Scalars['String']>>;
+  PageInfo: ResolverTypeWrapper<PartialDeep<PageInfo>>;
   Boolean: ResolverTypeWrapper<PartialDeep<Scalars['Boolean']>>;
+  Post: ResolverTypeWrapper<PartialDeep<Post>>;
+  ID: ResolverTypeWrapper<PartialDeep<Scalars['ID']>>;
+  PostConnection: ResolverTypeWrapper<PartialDeep<PostConnection>>;
+  PostCreatePayload: ResolverTypeWrapper<PartialDeep<PostCreatePayload>>;
+  PostEdge: ResolverTypeWrapper<PartialDeep<PostEdge>>;
+  Query: ResolverTypeWrapper<{}>;
+  User: ResolverTypeWrapper<PartialDeep<User>>;
+  UserCreatePayload: ResolverTypeWrapper<PartialDeep<UserCreatePayload>>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Query: {};
-  ID: PartialDeep<Scalars['ID']>;
-  User: PartialDeep<User>;
+  Mutation: {};
   String: PartialDeep<Scalars['String']>;
+  PageInfo: PartialDeep<PageInfo>;
   Boolean: PartialDeep<Scalars['Boolean']>;
+  Post: PartialDeep<Post>;
+  ID: PartialDeep<Scalars['ID']>;
+  PostConnection: PartialDeep<PostConnection>;
+  PostCreatePayload: PartialDeep<PostCreatePayload>;
+  PostEdge: PartialDeep<PostEdge>;
+  Query: {};
+  User: PartialDeep<User>;
+  UserCreatePayload: PartialDeep<UserCreatePayload>;
+}>;
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  postCreate?: Resolver<Maybe<ResolversTypes['PostCreatePayload']>, ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'body' | 'title'>>;
+  userCreate?: Resolver<Maybe<ResolversTypes['UserCreatePayload']>, ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'name'>>;
+}>;
+
+export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  postId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PostConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = ResolversObject<{
+  edges?: Resolver<Array<Maybe<ResolversTypes['PostEdge']>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PostCreatePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostCreatePayload'] = ResolversParentTypes['PostCreatePayload']> = ResolversObject<{
+  post?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  postById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostByIdArgs, 'id'>>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserCreatePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCreatePayload'] = ResolversParentTypes['UserCreatePayload']> = ResolversObject<{
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Mutation?: MutationResolvers<ContextType>;
+  PageInfo?: PageInfoResolvers<ContextType>;
+  Post?: PostResolvers<ContextType>;
+  PostConnection?: PostConnectionResolvers<ContextType>;
+  PostCreatePayload?: PostCreatePayloadResolvers<ContextType>;
+  PostEdge?: PostEdgeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserCreatePayload?: UserCreatePayloadResolvers<ContextType>;
 }>;
 

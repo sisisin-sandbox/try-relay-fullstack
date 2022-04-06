@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node ./src/index.ts",
-    "dev": "tsnd ./src/index.ts"
+    "dev": "tsnd ./src/index.ts",
+    "gen": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/federation": "^0.33.8",
