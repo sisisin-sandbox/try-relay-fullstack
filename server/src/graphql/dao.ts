@@ -1,8 +1,27 @@
-import users from '../data/users.json';
-import posts from '../data/posts.json';
 import fs from 'fs/promises';
 import path from 'path';
-const data = path.resolve(__dirname, '../data');
+const dataPath = path.resolve(__dirname, '../data');
+const seedsPath = path.resolve(__dirname, '../seeds');
+
+const tables = ['users', 'posts'] as const;
+
+const db: {
+  users: User[];
+  posts: Post[];
+} = { users: [], posts: [] };
+
+export const initDb = async () => {
+  for (const table of tables) {
+    const name = `${table}.json`;
+    const data = path.resolve(dataPath, name);
+    const seed = path.resolve(seedsPath, name);
+    await fs.stat(data).then(
+      () => {},
+      () => fs.copyFile(seed, data),
+    );
+    db[table] = await fs.readFile(data).then((data) => JSON.parse(data.toString()));
+  }
+};
 
 const sleep = (timeout: number) => new Promise((done) => setTimeout(done, timeout));
 const randomDelay = () => sleep(Math.random() * 2000);
@@ -14,10 +33,10 @@ export type User = {
 export const userDao = new (class {
   async findById(id: string): Promise<User> {
     await randomDelay();
-    return users.find((u) => u.id === id)!;
+    return db.users.find((u) => u.id === id)!;
   }
   async findMany() {
-    return users;
+    return db.users;
   }
   async create(name: string) {
     return { id: '1', name };
@@ -33,21 +52,21 @@ type Post = {
 export const postDao = new (class {
   async findById(id: string): Promise<Post> {
     await randomDelay();
-    return posts.find((p) => p.id === id)!;
+    return db.posts.find((p) => p.id === id)!;
   }
   async findMany(): Promise<Post[]> {
-    return posts;
+    return db.posts;
   }
   async create(authorId: string, title: string, body: string): Promise<Post> {
     const post = {
-      id: (+posts[posts.length - 1].id + 1).toString(),
+      id: (+db.posts[db.posts.length - 1].id + 1).toString(),
       userId: authorId,
       title,
       body,
     };
-    const newPosts = [...posts, post];
+    const newPosts = [...db.posts, post];
     console.log(newPosts);
-    await fs.writeFile(path.resolve(data, 'posts.json'), JSON.stringify(newPosts, null, 2));
+    await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
     return post;
   }
 })();
