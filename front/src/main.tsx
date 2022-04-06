@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+// import './index.css';
 import { RelayEnvironmentProvider } from 'react-relay';
 import { relayEnvironment } from './RelayEnvironment';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './AppRoutes';
 
 ReactDOM.render(
   <React.StrictMode>
     <RelayEnvironmentProvider environment={relayEnvironment}>
-      <React.Suspense fallback="loading...">
-        <App />
-      </React.Suspense>
+      <BrowserRouter>
+        <React.Suspense fallback="loading...">
+          <AppRoutes />
+        </React.Suspense>
+      </BrowserRouter>
     </RelayEnvironmentProvider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -48,8 +48,8 @@ type PostEdge {
 }
 
 type Query {
-  postById(id: ID!): Post
-  posts: PostConnection!
+  postById(postId: String!): Post
+  posts(first: Int! = 30): PostConnection!
   user(id: ID!): User
 }
 

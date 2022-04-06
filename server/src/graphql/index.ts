@@ -1,6 +1,6 @@
 import { ApolloServer, ExpressContext, gql } from 'apollo-server-express';
 import { buildSubgraphSchema, GraphQLSchemaModule } from '@apollo/federation';
-import { toGlobalId } from 'graphql-relay';
+import { fromGlobalId, toGlobalId } from 'graphql-relay';
 import { postDao, User, userDao } from './dao';
 import { Resolvers } from './__generated__/graphql';
 import { DocumentNode } from 'graphql';
@@ -86,14 +86,14 @@ const postQuery: SchemaModule = {
     }
 
     extend type Query {
-      postById(id: ID!): Post
-      posts: PostConnection!
+      postById(postId: String!): Post
+      posts(first: Int! = 30): PostConnection!
     }
   `,
   resolvers: {
     Query: {
       postById: async (source, args, context, info) => {
-        const post = await postDao.findById(args.id);
+        const post = await postDao.findById(args.postId);
         return { ...post, postId: post.id, id: toGlobalId('Post', post.id) };
       },
       posts: async (source, args, context, info) => {

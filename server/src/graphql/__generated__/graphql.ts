@@ -76,7 +76,12 @@ export type Query = {
 
 
 export type QueryPostByIdArgs = {
-  id: Scalars['ID'];
+  postId: Scalars['String'];
+};
+
+
+export type QueryPostsArgs = {
+  first?: Scalars['Int'];
 };
 
 
@@ -176,6 +181,7 @@ export type ResolversTypes = ResolversObject<{
   PostCreatePayload: ResolverTypeWrapper<PartialDeep<PostCreatePayload>>;
   PostEdge: ResolverTypeWrapper<PartialDeep<PostEdge>>;
   Query: ResolverTypeWrapper<{}>;
+  Int: ResolverTypeWrapper<PartialDeep<Scalars['Int']>>;
   User: ResolverTypeWrapper<PartialDeep<User>>;
   UserCreatePayload: ResolverTypeWrapper<PartialDeep<UserCreatePayload>>;
 }>;
@@ -192,6 +198,7 @@ export type ResolversParentTypes = ResolversObject<{
   PostCreatePayload: PartialDeep<PostCreatePayload>;
   PostEdge: PartialDeep<PostEdge>;
   Query: {};
+  Int: PartialDeep<Scalars['Int']>;
   User: PartialDeep<User>;
   UserCreatePayload: PartialDeep<UserCreatePayload>;
 }>;
@@ -236,8 +243,8 @@ export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversPar
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  postById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostByIdArgs, 'id'>>;
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType>;
+  postById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostByIdArgs, 'postId'>>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
