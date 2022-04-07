@@ -10,9 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <RelayEnvironmentProvider environment={relayEnvironment}>
       <BrowserRouter>
-        <React.Suspense fallback="loading...">
-          <AppRoutes />
-        </React.Suspense>
+        <AppRoutes />
       </BrowserRouter>
     </RelayEnvironmentProvider>
   </React.StrictMode>,

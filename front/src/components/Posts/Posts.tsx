@@ -1,11 +1,9 @@
-import { Links } from '../Links';
-
 import { graphql } from 'react-relay';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
-import { PostsQuery } from './__generated__/PostsQuery.graphql';
+import { Link } from 'react-router-dom';
 import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
 import { PostList } from './PostList';
-import { Link } from 'react-router-dom';
+import { PostsQuery } from './__generated__/PostsQuery.graphql';
 
 const operation = graphql`
   query PostsQuery {
@@ -25,7 +23,6 @@ const Content = ({ refresh, queryRef }: Props) => {
       <div>
         <Link to="/posts/new">new post</Link>
       </div>
-      <Links></Links>
     </div>
   );
 };

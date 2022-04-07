@@ -37,7 +37,6 @@ export type User = {
 };
 export const userDao = new (class {
   async findById(id: string): Promise<User> {
-    await randomDelay();
     return (await db.users()).find((u) => u.id === id)!;
   }
   async findMany() {
@@ -73,5 +72,19 @@ export const postDao = new (class {
     const newPosts = [...posts, post];
     await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
     return post;
+  }
+  async delete(authorId: string, postId: string): Promise<string | null> {
+    const posts = await db.posts();
+    const target = posts.find((p) => p.id === postId);
+    if (!target) {
+      return null;
+    }
+    if (target.userId !== authorId) {
+      throw new Error(`Invalid operation. postId: ${postId} is not yours.`);
+    }
+
+    const newPosts = posts.filter((p) => p.id !== postId);
+    await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
+    return postId;
   }
 })();

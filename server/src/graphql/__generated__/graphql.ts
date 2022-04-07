@@ -19,12 +19,18 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   postCreate?: Maybe<PostCreatePayload>;
+  postDelete?: Maybe<PostDeletePayload>;
   userCreate?: Maybe<UserCreatePayload>;
 };
 
 
 export type MutationPostCreateArgs = {
   input: PostCreateInput;
+};
+
+
+export type MutationPostDeleteArgs = {
+  input: PostDeleteInput;
 };
 
 
@@ -68,6 +74,15 @@ export type PostCreatePayload = {
   __typename?: 'PostCreatePayload';
   post: Post;
   postEdge: PostEdge;
+};
+
+export type PostDeleteInput = {
+  postId: Scalars['String'];
+};
+
+export type PostDeletePayload = {
+  __typename?: 'PostDeletePayload';
+  deletedPostId: Scalars['ID'];
 };
 
 export type PostEdge = {
@@ -196,6 +211,8 @@ export type ResolversTypes = ResolversObject<{
   PostConnection: ResolverTypeWrapper<PartialDeep<PostConnection>>;
   PostCreateInput: ResolverTypeWrapper<PartialDeep<PostCreateInput>>;
   PostCreatePayload: ResolverTypeWrapper<PartialDeep<PostCreatePayload>>;
+  PostDeleteInput: ResolverTypeWrapper<PartialDeep<PostDeleteInput>>;
+  PostDeletePayload: ResolverTypeWrapper<PartialDeep<PostDeletePayload>>;
   PostEdge: ResolverTypeWrapper<PartialDeep<PostEdge>>;
   Query: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<PartialDeep<Scalars['Int']>>;
@@ -215,6 +232,8 @@ export type ResolversParentTypes = ResolversObject<{
   PostConnection: PartialDeep<PostConnection>;
   PostCreateInput: PartialDeep<PostCreateInput>;
   PostCreatePayload: PartialDeep<PostCreatePayload>;
+  PostDeleteInput: PartialDeep<PostDeleteInput>;
+  PostDeletePayload: PartialDeep<PostDeletePayload>;
   PostEdge: PartialDeep<PostEdge>;
   Query: {};
   Int: PartialDeep<Scalars['Int']>;
@@ -224,6 +243,7 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   postCreate?: Resolver<Maybe<ResolversTypes['PostCreatePayload']>, ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
+  postDelete?: Resolver<Maybe<ResolversTypes['PostDeletePayload']>, ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'input'>>;
   userCreate?: Resolver<Maybe<ResolversTypes['UserCreatePayload']>, ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'name'>>;
 }>;
 
@@ -261,6 +281,11 @@ export type PostCreatePayloadResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PostDeletePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostDeletePayload'] = ResolversParentTypes['PostDeletePayload']> = ResolversObject<{
+  deletedPostId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   node?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
@@ -293,6 +318,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Post?: PostResolvers<ContextType>;
   PostConnection?: PostConnectionResolvers<ContextType>;
   PostCreatePayload?: PostCreatePayloadResolvers<ContextType>;
+  PostDeletePayload?: PostDeletePayloadResolvers<ContextType>;
   PostEdge?: PostEdgeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

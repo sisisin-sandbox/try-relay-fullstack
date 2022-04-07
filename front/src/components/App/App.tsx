@@ -1,9 +1,7 @@
 import { graphql } from 'react-relay';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
-
-import type { AppQuery } from './__generated__/AppQuery.graphql';
-import { Links } from '../Links';
 import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
+import type { AppQuery } from './__generated__/AppQuery.graphql';
 
 const operation = graphql`
   query AppQuery($id: ID!) {
@@ -23,7 +21,6 @@ const Content = ({ refresh, queryRef }: Props) => {
       <header className="App-header">
         <p>{data.user?.name}</p>
       </header>
-      <Links></Links>
     </div>
   );
 };

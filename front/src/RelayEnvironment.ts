@@ -1,11 +1,20 @@
 // your-app-name/src/RelayEnvironment.js
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
+let userId = localStorage.getItem('userId') ?? '1';
+
+export const getUserId = () => userId;
+export const setUserId = (id: string) => {
+  userId = id;
+  localStorage.setItem('userId', id);
+};
+
 async function fetchGraphql(text: string, variables: Record<string, any>) {
   const response = await fetch('http://localhost:3100/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${userId}`,
     },
     body: JSON.stringify({
       query: text,

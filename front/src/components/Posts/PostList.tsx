@@ -1,7 +1,8 @@
 import { graphql } from 'react-relay';
-import { useFragment } from 'react-relay/hooks';
+import { ConnectionHandler, useFragment, useMutation } from 'react-relay/hooks';
 import { Link } from 'react-router-dom';
 import { PostListFragment$key } from './__generated__/PostListFragment.graphql';
+import { PostListMutation } from './__generated__/PostListMutation.graphql';
 
 const operation = graphql`
   fragment PostListFragment on Query
@@ -20,12 +21,35 @@ const operation = graphql`
   }
 `;
 
+const deleteOperation = graphql`
+  mutation PostListMutation($input: PostDeleteInput!, $connections: [ID!]!) {
+    postDelete(input: $input) {
+      deletedPostId @deleteEdge(connections: $connections)
+    }
+  }
+`;
+
 type Props = {
   queryRef: PostListFragment$key;
 };
+
+const DeleteButton = ({ postId }: { postId: string }) => {
+  const [commitDeletePost, isInFlightDeletePost] = useMutation<PostListMutation>(deleteOperation);
+
+  const deletePost = () => {
+    commitDeletePost({
+      variables: { input: { postId }, connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')] },
+    });
+  };
+
+  return (
+    <button disabled={isInFlightDeletePost} onClick={deletePost}>
+      delete
+    </button>
+  );
+};
 export const PostList = ({ queryRef }: Props) => {
   const data = useFragment(operation, queryRef);
-
   return (
     <div className="App">
       <div>
@@ -38,6 +62,7 @@ export const PostList = ({ queryRef }: Props) => {
                 <Link to={`/posts/${node.postId}`}>
                   id: {node.postId},title: {node.title}
                 </Link>
+                <button>edit</button> <DeleteButton postId={node.postId}></DeleteButton>
               </li>
             );
           })}

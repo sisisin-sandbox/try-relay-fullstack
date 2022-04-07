@@ -1,7 +1,6 @@
 import React from 'react';
 import { ConnectionHandler, graphql, useMutation } from 'react-relay';
 import { useNavigate } from 'react-router-dom';
-import { Links } from '../Links';
 import { CreatePostMutation } from './__generated__/CreatePostMutation.graphql';
 
 const operation = graphql`
@@ -68,7 +67,6 @@ export function CreatePost() {
           Create
         </button>
       </div>
-      <Links></Links>
     </>
   );
 }

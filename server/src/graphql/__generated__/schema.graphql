@@ -15,6 +15,7 @@ scalar _FieldSet
 
 type Mutation {
   postCreate(input: PostCreateInput!): PostCreatePayload
+  postDelete(input: PostDeleteInput!): PostDeletePayload
   userCreate(name: String!): UserCreatePayload
 }
 
@@ -50,6 +51,14 @@ input PostCreateInput {
 type PostCreatePayload {
   post: Post!
   postEdge: PostEdge!
+}
+
+input PostDeleteInput {
+  postId: String!
+}
+
+type PostDeletePayload {
+  deletedPostId: ID!
 }
 
 type PostEdge {

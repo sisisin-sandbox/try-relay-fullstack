@@ -145,6 +145,7 @@ const postMutation: SchemaModule = {
   typeDefs: gql`
     extend type Mutation {
       postCreate(input: PostCreateInput!): PostCreatePayload
+      postDelete(input: PostDeleteInput!): PostDeletePayload
     }
     input PostCreateInput {
       title: String!
@@ -154,10 +155,20 @@ const postMutation: SchemaModule = {
       post: Post!
       postEdge: PostEdge!
     }
+
+    input PostDeleteInput {
+      postId: String!
+    }
+    type PostDeletePayload {
+      deletedPostId: ID!
+    }
   `,
   resolvers: {
     Mutation: {
       postCreate: async (source, args, context, info) => {
+        if (context.sessionUser == null) {
+          throw new Error('Not authenticated');
+        }
         const postFromDB = await postDao.create(context.sessionUser.id, args.input.title, args.input.body);
         const post = { ...postFromDB, postId: postFromDB.id, id: toGlobalId('Post', postFromDB.id) };
         return {
@@ -168,19 +179,30 @@ const postMutation: SchemaModule = {
           },
         };
       },
+      postDelete: async (source, args, context, info) => {
+        if (context.sessionUser == null) {
+          throw new Error('Not authenticated');
+        }
+        const id = await postDao.delete(context.sessionUser.id, args.input.postId);
+        return id === null ? null : { deletedPostId: toGlobalId('Post', id) };
+      },
     },
   },
 };
 
 const schemaModules: SchemaModule[] = [base, nodeQuery, userQuery, userMutation, postQuery, postMutation];
 
-type AppContext = ExpressContext & { sessionUser: User };
+type AppContext = ExpressContext & { sessionUser: User | null };
 export const createServer = async () => {
   return new ApolloServer<AppContext>({
     schema: buildSubgraphSchema(schemaModules),
     context: async ({ req, res }) => {
-      let sessionUser = await userDao.findById('1');
-
+      const id = req.headers.authorization;
+      const isInvalid = id == null || Number.isNaN(Number(id)) || Number.isNaN(parseInt(id));
+      let sessionUser = null;
+      if (!isInvalid) {
+        sessionUser = await userDao.findById(id);
+      }
       return { req, res, sessionUser };
     },
   });
