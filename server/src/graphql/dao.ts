@@ -87,4 +87,24 @@ export const postDao = new (class {
     await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
     return postId;
   }
+  async edit(
+    authorId: string,
+    postId: string,
+    title: string | undefined | null,
+    body: string | undefined | null,
+  ): Promise<Post> {
+    const posts = await db.posts();
+    const target = posts.find((p) => p.id === postId);
+    if (!target) {
+      throw new Error(`Invalid operation. postId: ${postId} is not exists.`);
+    }
+    if (target.userId !== authorId) {
+      throw new Error(`Invalid operation. postId: ${postId} is not yours.`);
+    }
+
+    const updated = { ...target, title: title ?? target.title, body: body ?? target.body };
+    const newPosts = posts.map((p) => (p.id === postId ? updated : p));
+    await fs.writeFile(path.resolve(dataPath, 'posts.json'), JSON.stringify(newPosts, null, 2));
+    return updated;
+  }
 })();

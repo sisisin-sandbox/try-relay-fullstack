@@ -146,6 +146,7 @@ const postMutation: SchemaModule = {
     extend type Mutation {
       postCreate(input: PostCreateInput!): PostCreatePayload
       postDelete(input: PostDeleteInput!): PostDeletePayload
+      postEdit(input: PostEditInput!): PostEditPayload
     }
     input PostCreateInput {
       title: String!
@@ -161,6 +162,16 @@ const postMutation: SchemaModule = {
     }
     type PostDeletePayload {
       deletedPostId: ID!
+    }
+
+    input PostEditInput {
+      id: ID!
+      title: String
+      body: String
+    }
+    type PostEditPayload {
+      post: Post!
+      postEdge: PostEdge!
     }
   `,
   resolvers: {
@@ -185,6 +196,21 @@ const postMutation: SchemaModule = {
         }
         const id = await postDao.delete(context.sessionUser.id, args.input.postId);
         return id === null ? null : { deletedPostId: toGlobalId('Post', id) };
+      },
+      postEdit: async (source, args, context, info) => {
+        if (context.sessionUser == null) {
+          throw new Error('Not authenticated');
+        }
+        const postId = fromGlobalId(args.input.id).id;
+        const postFromDB = await postDao.edit(context.sessionUser.id, postId, args.input.title, args.input.body);
+        const post = { ...postFromDB, postId: postFromDB.id, id: toGlobalId('Post', postFromDB.id) };
+        return {
+          post,
+          postEdge: {
+            cursor: post.id,
+            node: post,
+          },
+        };
       },
     },
   },

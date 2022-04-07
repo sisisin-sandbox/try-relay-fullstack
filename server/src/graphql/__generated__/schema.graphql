@@ -16,6 +16,7 @@ scalar _FieldSet
 type Mutation {
   postCreate(input: PostCreateInput!): PostCreatePayload
   postDelete(input: PostDeleteInput!): PostDeletePayload
+  postEdit(input: PostEditInput!): PostEditPayload
   userCreate(name: String!): UserCreatePayload
 }
 
@@ -64,6 +65,17 @@ type PostDeletePayload {
 type PostEdge {
   cursor: String!
   node: Post!
+}
+
+input PostEditInput {
+  body: String
+  id: ID!
+  title: String
+}
+
+type PostEditPayload {
+  post: Post!
+  postEdge: PostEdge!
 }
 
 type Query {

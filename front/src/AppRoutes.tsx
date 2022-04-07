@@ -4,6 +4,7 @@ import { App } from './components/App/App';
 import { Links } from './components/Links';
 import { Post } from './components/Post/Post';
 import { CreatePost } from './components/PostForm/CreatePost';
+import { EditPost } from './components/PostForm/EditPost';
 import { Posts } from './components/Posts/Posts';
 
 type State = { error: { message: string } | null };
@@ -33,6 +34,7 @@ export const AppRoutes = () => {
               <Route path="/" element={<App></App>} />
               <Route path="/posts" element={<Posts></Posts>} />
               <Route path="/posts/:id" element={<Post></Post>} />
+              <Route path="/posts/:id/edit" element={<EditPost></EditPost>} />
               <Route path="/posts/new" element={<CreatePost />} />
             </Routes>
           </React.Suspense>

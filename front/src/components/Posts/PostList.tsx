@@ -1,6 +1,6 @@
 import { graphql } from 'react-relay';
 import { ConnectionHandler, useFragment, useMutation } from 'react-relay/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PostListFragment$key } from './__generated__/PostListFragment.graphql';
 import { PostListMutation } from './__generated__/PostListMutation.graphql';
 
@@ -48,8 +48,14 @@ const DeleteButton = ({ postId }: { postId: string }) => {
     </button>
   );
 };
+
 export const PostList = ({ queryRef }: Props) => {
   const data = useFragment(operation, queryRef);
+  const navigate = useNavigate();
+  const navigateEdit = (id: string) => () => {
+    navigate(`/posts/${id}/edit`);
+  };
+
   return (
     <div className="App">
       <div>
@@ -59,10 +65,8 @@ export const PostList = ({ queryRef }: Props) => {
             const { node } = edge;
             return (
               <li key={node.id}>
-                <Link to={`/posts/${node.postId}`}>
-                  id: {node.postId},title: {node.title}
-                </Link>
-                <button>edit</button> <DeleteButton postId={node.postId}></DeleteButton>
+                id: {node.id} postId: {node.postId} <Link to={`/posts/${node.postId}`}>title: {node.title}</Link>
+                <button onClick={navigateEdit(node.id)}>edit</button> <DeleteButton postId={node.postId}></DeleteButton>
               </li>
             );
           })}
