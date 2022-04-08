@@ -4,6 +4,7 @@ import * as React from 'react';
 import { ConnectionHandler, graphql, useMutation } from 'react-relay';
 import { useNavigate } from 'react-router-dom';
 import { type CreatePostMutation } from './__generated__/CreatePostMutation.graphql';
+import type { PostCreateErrorCode } from './__generated__/CreatePostMutation.graphql';
 
 const operation = graphql`
   mutation CreatePostMutation($input: PostCreateInput!, $connections: [ID!]!) {
@@ -23,15 +24,16 @@ const operation = graphql`
         }
       }
       userErrors {
-        ... on PostCreateTitleDoesNotExist {
-          code
+        ... on UserError {
+          __typename
           message
           field
         }
+        ... on PostCreateTitleDoesNotExist {
+          code
+        }
         ... on PostCreateProhibitedWordsExist {
           code
-          message
-          field
           words
         }
       }
@@ -39,7 +41,7 @@ const operation = graphql`
   }
 `;
 
-export const CreatePost:React.AbstractComponent<{}> = ()=> {
+export const CreatePost: React.AbstractComponent<{}> = () => {
   const titleRef = React.useRef<HTMLInputElement | null>(null);
   const bodyRef = React.useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -58,13 +60,46 @@ export const CreatePost:React.AbstractComponent<{}> = ()=> {
         connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')],
       },
       onCompleted: (data) => {
-        if ((data.postCreate?.userErrors ?? []).length > 0) {
-          setErrorResult({ something: ['some error occurred'] });
-        }
-        if (data.postCreate?.result == null) {
-          console.error('postCreate is null');
+        const errorMessages: { [key: string]: string[] } = {};
+        (data.postCreate?.userErrors ?? []).forEach((err) => {
+          if (err.__typename === 'PostCreateTitleDoesNotExist') {
+            const {
+              field,
+              code,
+              message,
+            }: {
+              +message: string,
+              +field: string,
+              +code: PostCreateErrorCode,
+            } = (err: any);
+
+            if (errorMessages[field] == null) errorMessages[field] = [];
+            errorMessages[field].push(message);
+          }
+
+          if (err.__typename === 'PostCreateProhibitedWordsExist') {
+            const {
+              field,
+              code,
+              message,
+              words,
+            }: {
+              +message: string,
+              +field: string,
+              +code: PostCreateErrorCode,
+              +words: string[],
+            } = (err: any);
+
+            if (errorMessages[field] == null) errorMessages[field] = [];
+            errorMessages[field].push(message);
+          }
+        }, {});
+
+        if (Object.keys(errorMessages).length > 0) {
+          setErrorResult(errorMessages);
           return;
         }
+
         navigate(`/posts`);
         // navigate(`/posts/${data.postCreate.post.postId}`);
       },
@@ -89,4 +124,4 @@ export const CreatePost:React.AbstractComponent<{}> = ()=> {
       </div>
     </>
   );
-}
+};

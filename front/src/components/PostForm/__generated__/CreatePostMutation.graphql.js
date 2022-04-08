@@ -34,9 +34,10 @@ export type CreatePostMutationResponse = {|
       |},
     |},
     +userErrors: $ReadOnlyArray<{|
-      +code?: PostCreateErrorCode,
+      +__typename?: string,
       +message?: string,
       +field?: string,
+      +code?: PostCreateErrorCode,
       +words?: $ReadOnlyArray<string>,
     |}>,
   |}
@@ -69,15 +70,17 @@ mutation CreatePostMutation(
     }
     userErrors {
       __typename
-      ... on PostCreateTitleDoesNotExist {
-        code
+      ... on UserError {
+        __isUserError: __typename
+        __typename
         message
         field
       }
+      ... on PostCreateTitleDoesNotExist {
+        code
+      }
       ... on PostCreateProhibitedWordsExist {
         code
-        message
-        field
         words
       }
     }
@@ -177,7 +180,7 @@ v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "code",
+  "name": "__typename",
   "storageKey": null
 },
 v7 = {
@@ -195,21 +198,24 @@ v8 = {
   "storageKey": null
 },
 v9 = {
-  "kind": "InlineFragment",
-  "selections": [
-    (v6/*: any*/),
-    (v7/*: any*/),
-    (v8/*: any*/)
-  ],
-  "type": "PostCreateTitleDoesNotExist",
-  "abstractKey": null
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "code",
+  "storageKey": null
 },
 v10 = {
   "kind": "InlineFragment",
   "selections": [
-    (v6/*: any*/),
-    (v7/*: any*/),
-    (v8/*: any*/),
+    (v9/*: any*/)
+  ],
+  "type": "PostCreateTitleDoesNotExist",
+  "abstractKey": null
+},
+v11 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v9/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -260,8 +266,18 @@ return {
             "name": "userErrors",
             "plural": true,
             "selections": [
-              (v9/*: any*/),
-              (v10/*: any*/)
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/)
+                ],
+                "type": "UserError",
+                "abstractKey": "__isUserError"
+              },
+              (v10/*: any*/),
+              (v11/*: any*/)
             ],
             "storageKey": null
           }
@@ -326,15 +342,18 @@ return {
             "name": "userErrors",
             "plural": true,
             "selections": [
+              (v6/*: any*/),
               {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "__typename",
-                "storageKey": null
+                "kind": "InlineFragment",
+                "selections": [
+                  (v7/*: any*/),
+                  (v8/*: any*/)
+                ],
+                "type": "UserError",
+                "abstractKey": "__isUserError"
               },
-              (v9/*: any*/),
-              (v10/*: any*/)
+              (v10/*: any*/),
+              (v11/*: any*/)
             ],
             "storageKey": null
           }
@@ -344,16 +363,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "55618368480838a4e9a9f8f64abdb523",
+    "cacheID": "c2d2371870a0ac9ca3e1c999943ae974",
     "id": null,
     "metadata": {},
     "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n    userErrors {\n      __typename\n      ... on PostCreateTitleDoesNotExist {\n        code\n        message\n        field\n      }\n      ... on PostCreateProhibitedWordsExist {\n        code\n        message\n        field\n        words\n      }\n    }\n  }\n}\n"
+    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n    userErrors {\n      __typename\n      ... on UserError {\n        __isUserError: __typename\n        __typename\n        message\n        field\n      }\n      ... on PostCreateTitleDoesNotExist {\n        code\n      }\n      ... on PostCreateProhibitedWordsExist {\n        code\n        words\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '795086dcdc7d5e900da2b82c1fddd2f1';
+(node/*: any*/).hash = '2c945e5a4d145f4ac54e18e772b0b845';
 
 export default node;

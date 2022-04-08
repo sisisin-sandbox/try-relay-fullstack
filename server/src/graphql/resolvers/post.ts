@@ -128,6 +128,16 @@ const postMutation: SchemaModule = {
           });
         }
 
+        if (args.input.title.includes('prohibited')) {
+          userErrors.push({
+            __typename: 'PostCreateProhibitedWordsExist',
+            code: PostCreateErrorCode.ProhibitedWordsExist,
+            message: '`title` contains prohibited words',
+            field: 'title',
+            words: ['prohibited'],
+          });
+        }
+
         if (userErrors.length > 0) {
           return { result: null, userErrors };
         }
