@@ -4,6 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
+export type PostCreateErrorCode = "PROHIBITED_WORDS_EXIST" | "TITLE_DOES_NOT_EXIST" | "%future added value";
 export type PostCreateInput = {
     body: string;
     title: string;
@@ -28,6 +29,12 @@ export type CreatePostMutationResponse = {
                 };
             };
         } | null;
+        readonly userErrors: ReadonlyArray<{
+            readonly code?: PostCreateErrorCode | undefined;
+            readonly message?: string | undefined;
+            readonly field?: string | undefined;
+            readonly words?: ReadonlyArray<string> | undefined;
+        }>;
     } | null;
 };
 export type CreatePostMutation = {
@@ -54,6 +61,20 @@ mutation CreatePostMutation(
         node {
           id
         }
+      }
+    }
+    userErrors {
+      __typename
+      ... on PostCreateTitleDoesNotExist {
+        code
+        message
+        field
+      }
+      ... on PostCreateProhibitedWordsExist {
+        code
+        message
+        field
+        words
       }
     }
   }
@@ -147,6 +168,54 @@ v5 = {
     }
   ],
   "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "code",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "field",
+  "storageKey": null
+},
+v9 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v6/*: any*/),
+    (v7/*: any*/),
+    (v8/*: any*/)
+  ],
+  "type": "PostCreateTitleDoesNotExist",
+  "abstractKey": null
+},
+v10 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v6/*: any*/),
+    (v7/*: any*/),
+    (v8/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "words",
+      "storageKey": null
+    }
+  ],
+  "type": "PostCreateProhibitedWordsExist",
+  "abstractKey": null
 };
 return {
   "fragment": {
@@ -176,6 +245,19 @@ return {
             "selections": [
               (v4/*: any*/),
               (v5/*: any*/)
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": null,
+            "kind": "LinkedField",
+            "name": "userErrors",
+            "plural": true,
+            "selections": [
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
             "storageKey": null
           }
@@ -231,6 +313,26 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": null,
+            "kind": "LinkedField",
+            "name": "userErrors",
+            "plural": true,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "__typename",
+                "storageKey": null
+              },
+              (v9/*: any*/),
+              (v10/*: any*/)
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -238,14 +340,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6cc4d38d98df077ccfab4f04440262ec",
+    "cacheID": "55618368480838a4e9a9f8f64abdb523",
     "id": null,
     "metadata": {},
     "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n    userErrors {\n      __typename\n      ... on PostCreateTitleDoesNotExist {\n        code\n        message\n        field\n      }\n      ... on PostCreateProhibitedWordsExist {\n        code\n        message\n        field\n        words\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '11d62fd68c43db4babc1c830ec68cbc1';
+(node as any).hash = '795086dcdc7d5e900da2b82c1fddd2f1';
 export default node;

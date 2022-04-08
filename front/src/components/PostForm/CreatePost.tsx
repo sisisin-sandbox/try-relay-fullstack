@@ -20,6 +20,19 @@ const operation = graphql`
           }
         }
       }
+      userErrors {
+        ... on PostCreateTitleDoesNotExist {
+          code
+          message
+          field
+        }
+        ... on PostCreateProhibitedWordsExist {
+          code
+          message
+          field
+          words
+        }
+      }
     }
   }
 `;
@@ -29,17 +42,13 @@ export function CreatePost() {
   const bodyRef = React.useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [commit, isInFlight] = useMutation<CreatePostMutation>(operation);
+  const [errorResult, setErrorResult] = React.useState<{ [key: string]: string[] }>({});
 
   const submit = () => {
     if (isInFlight) return;
 
-    const title = titleRef.current?.value;
-    const body = bodyRef.current?.value;
-
-    if (title == null || title == '' || body == null || body == '') {
-      console.log('validation error');
-      return;
-    }
+    const title = titleRef.current?.value!;
+    const body = bodyRef.current?.value!;
 
     commit({
       variables: {
@@ -47,6 +56,9 @@ export function CreatePost() {
         connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')],
       },
       onCompleted: (data) => {
+        if ((data.postCreate?.userErrors ?? []).length > 0) {
+          setErrorResult({ something: ['some error occurred'] });
+        }
         if (data.postCreate?.result == null) {
           console.error('postCreate is null');
           return;
@@ -60,10 +72,14 @@ export function CreatePost() {
     <>
       <div>
         title: <input type="text" name="title" ref={titleRef} />
+        {errorResult.title && errorResult.title.map((error) => <span style={{ color: 'red' }}>{error}</span>)}
       </div>
       <div>
         body: <input type="text" name="body" ref={bodyRef} />
       </div>
+      {errorResult.something?.map((error) => (
+        <span style={{ color: 'red' }}>{error}</span>
+      ))}
       <div>
         <button disabled={isInFlight} onClick={submit}>
           Create
