@@ -1,7 +1,9 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { ConnectionHandler, graphql, useMutation } from 'react-relay';
 import { useNavigate } from 'react-router-dom';
-import { CreatePostMutation } from './__generated__/CreatePostMutation.graphql';
+import { type CreatePostMutation } from './__generated__/CreatePostMutation.graphql';
 
 const operation = graphql`
   mutation CreatePostMutation($input: PostCreateInput!, $connections: [ID!]!) {
@@ -37,9 +39,9 @@ const operation = graphql`
   }
 `;
 
-export function CreatePost() {
-  const titleRef = React.useRef<HTMLInputElement>(null);
-  const bodyRef = React.useRef<HTMLInputElement>(null);
+export const CreatePost:React.AbstractComponent<{}> = ()=> {
+  const titleRef = React.useRef<HTMLInputElement | null>(null);
+  const bodyRef = React.useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const [commit, isInFlight] = useMutation<CreatePostMutation>(operation);
   const [errorResult, setErrorResult] = React.useState<{ [key: string]: string[] }>({});
@@ -47,8 +49,8 @@ export function CreatePost() {
   const submit = () => {
     if (isInFlight) return;
 
-    const title = titleRef.current?.value!;
-    const body = bodyRef.current?.value!;
+    const title: string = (titleRef.current?.value: any);
+    const body: string = (bodyRef.current?.value: any);
 
     commit({
       variables: {

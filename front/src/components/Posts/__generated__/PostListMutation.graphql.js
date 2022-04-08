@@ -1,26 +1,30 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
-export type PostDeleteInput = {
-    postId: string;
-};
-export type PostListMutationVariables = {
-    input: PostDeleteInput;
-    connections: Array<string>;
-};
-export type PostListMutationResponse = {
-    readonly postDelete: {
-        readonly deletedPostId: string;
-    } | null;
-};
-export type PostListMutation = {
-    readonly response: PostListMutationResponse;
-    readonly variables: PostListMutationVariables;
-};
-
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
+export type PostDeleteInput = {|
+  postId: string
+|};
+export type PostListMutationVariables = {|
+  input: PostDeleteInput,
+  connections: $ReadOnlyArray<string>,
+|};
+export type PostListMutationResponse = {|
+  +postDelete: ?{|
+    +deletedPostId: string
+  |}
+|};
+export type PostListMutation = {|
+  variables: PostListMutationVariables,
+  response: PostListMutationResponse,
+|};
+*/
 
 
 /*
@@ -33,7 +37,7 @@ mutation PostListMutation(
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
@@ -133,5 +137,7 @@ return {
   }
 };
 })();
-(node as any).hash = '1efd824699df560ee21238ed4a42b63d';
+// prettier-ignore
+(node/*: any*/).hash = '1efd824699df560ee21238ed4a42b63d';
+
 export default node;

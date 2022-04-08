@@ -1,6 +1,9 @@
+// @flow
+
+import * as React from 'react'
 import { graphql } from 'react-relay';
-import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
-import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
+import {type PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
+import GQLQueryLoader, {type GenerateQueryLoaderProps } from '../Loader';
 import type { AppQuery } from './__generated__/AppQuery.graphql';
 
 const operation = graphql`
@@ -25,7 +28,7 @@ const Content = ({ refresh, queryRef }: Props) => {
   );
 };
 
-export function App() {
+export const App: React.AbstractComponent<{}>=()=> {
   return (
     <GQLQueryLoader
       variables={{ id: '1' }}

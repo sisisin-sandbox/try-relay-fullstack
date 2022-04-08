@@ -1,4 +1,5 @@
-import React, { ErrorInfo } from 'react';
+// @flow
+import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { App } from './components/App/App';
 import { Links } from './components/Links';
@@ -8,14 +9,14 @@ import { EditPost } from './components/PostForm/EditPost';
 import { Posts } from './components/Posts/Posts';
 
 type State = { error: { message: string } | null };
-class Boundary extends React.Component {
-  state: State = { error: null };
+class Boundary extends React.Component<{children: React.Node}, State> {
+  state = { error: null };
 
   static getDerivedStateFromError(error: Error) {
     return { error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo) {
     console.log(error);
     console.log(errorInfo);
   }
@@ -29,7 +30,7 @@ class Boundary extends React.Component {
   }
 }
 
-export const AppRoutes = () => {
+export const AppRoutes: React.AbstractComponent<{}> = () => {
   return (
     <div>
       <div>

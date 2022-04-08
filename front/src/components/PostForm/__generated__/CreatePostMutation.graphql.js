@@ -1,47 +1,51 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
 export type PostCreateErrorCode = "PROHIBITED_WORDS_EXIST" | "TITLE_DOES_NOT_EXIST" | "%future added value";
-export type PostCreateInput = {
-    body: string;
-    title: string;
-};
-export type CreatePostMutationVariables = {
-    input: PostCreateInput;
-    connections: Array<string>;
-};
-export type CreatePostMutationResponse = {
-    readonly postCreate: {
-        readonly result: {
-            readonly post: {
-                readonly id: string;
-                readonly postId: string;
-                readonly userId: string;
-                readonly title: string;
-                readonly body: string;
-            };
-            readonly postEdge: {
-                readonly node: {
-                    readonly id: string;
-                };
-            };
-        } | null;
-        readonly userErrors: ReadonlyArray<{
-            readonly code?: PostCreateErrorCode | undefined;
-            readonly message?: string | undefined;
-            readonly field?: string | undefined;
-            readonly words?: ReadonlyArray<string> | undefined;
-        }>;
-    } | null;
-};
-export type CreatePostMutation = {
-    readonly response: CreatePostMutationResponse;
-    readonly variables: CreatePostMutationVariables;
-};
-
+export type PostCreateInput = {|
+  body: string,
+  title: string,
+|};
+export type CreatePostMutationVariables = {|
+  input: PostCreateInput,
+  connections: $ReadOnlyArray<string>,
+|};
+export type CreatePostMutationResponse = {|
+  +postCreate: ?{|
+    +result: ?{|
+      +post: {|
+        +id: string,
+        +postId: string,
+        +userId: string,
+        +title: string,
+        +body: string,
+      |},
+      +postEdge: {|
+        +node: {|
+          +id: string
+        |}
+      |},
+    |},
+    +userErrors: $ReadOnlyArray<{|
+      +code?: PostCreateErrorCode,
+      +message?: string,
+      +field?: string,
+      +words?: $ReadOnlyArray<string>,
+    |}>,
+  |}
+|};
+export type CreatePostMutation = {|
+  variables: CreatePostMutationVariables,
+  response: CreatePostMutationResponse,
+|};
+*/
 
 
 /*
@@ -81,7 +85,7 @@ mutation CreatePostMutation(
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
@@ -349,5 +353,7 @@ return {
   }
 };
 })();
-(node as any).hash = '795086dcdc7d5e900da2b82c1fddd2f1';
+// prettier-ignore
+(node/*: any*/).hash = '795086dcdc7d5e900da2b82c1fddd2f1';
+
 export default node;

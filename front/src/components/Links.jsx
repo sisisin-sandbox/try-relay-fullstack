@@ -1,11 +1,13 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { useRelayEnvironment } from 'react-relay';
 import { Link } from 'react-router-dom';
 import { getUserId, setUserId } from '../RelayEnvironment';
 
 const userId = getUserId();
 const invalid = (id: string) => Number.isNaN(parseInt(id)) || Number.isNaN(Number(id));
-export const Links = () => {
+export const Links: React.AbstractComponent<{}> = () => {
   const env = useRelayEnvironment();
   const [isInvalidUserId, setIsInvalidUserId] = React.useState(invalid(userId));
   const printRelayStore = () => {

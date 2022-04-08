@@ -1,15 +1,15 @@
-// your-app-name/src/RelayEnvironment.js
+// @flow
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
 let userId = localStorage.getItem('userId') ?? '1';
 
-export const getUserId = () => userId;
-export const setUserId = (id: string) => {
+export const getUserId = (): string => userId;
+export const setUserId = (id: string): void => {
   userId = id;
   localStorage.setItem('userId', id);
 };
 
-async function fetchGraphql(text: string, variables: Record<string, any>) {
+async function fetchGraphql(text: string, variables: { [key: string]: any }) {
   const response = await fetch('http://localhost:3100/graphql', {
     method: 'POST',
     headers: {
@@ -33,7 +33,7 @@ async function fetchRelay(params: any, variables: any) {
 }
 
 // Export a singleton instance of Relay Environment configured with our network function:
-export const relayEnvironment = new Environment({
+export const relayEnvironment: Environment = new Environment({
   network: Network.create(fetchRelay),
   store: new Store(new RecordSource()),
 });

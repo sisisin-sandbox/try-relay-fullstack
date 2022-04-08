@@ -1,33 +1,40 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
+'use strict';
 
-import { FragmentRefs } from "relay-runtime";
-export type PostListFragment = {
-    readonly posts: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly id: string;
-                readonly postId: string;
-                readonly userId: string;
-                readonly title: string;
-                readonly body: string;
-            };
-        } | null>;
-    };
-    readonly " $refType": "PostListFragment";
-};
+/*::
+import type { ReaderFragment } from 'relay-runtime';
+import type { FragmentReference } from "relay-runtime";
+declare export opaque type PostListFragment$ref: FragmentReference;
+declare export opaque type PostListFragment$fragmentType: PostListFragment$ref;
+export type PostListFragment = {|
+  +posts: {|
+    +edges: $ReadOnlyArray<?{|
+      +node: {|
+        +id: string,
+        +postId: string,
+        +userId: string,
+        +title: string,
+        +body: string,
+      |}
+    |}>
+  |},
+  +$refType: PostListFragment$ref,
+|};
 export type PostListFragment$data = PostListFragment;
 export type PostListFragment$key = {
-    readonly " $data"?: PostListFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"PostListFragment">;
+  +$data?: PostListFragment$data,
+  +$fragmentRefs: PostListFragment$ref,
+  ...
 };
+*/
 
 
-
-const node: ReaderFragment = {
+const node/*: ReaderFragment*/ = {
   "argumentDefinitions": [
     {
       "defaultValue": null,
@@ -166,5 +173,7 @@ const node: ReaderFragment = {
   "type": "Query",
   "abstractKey": null
 };
-(node as any).hash = '8a0cc7ceb40d5bda718ef669a035f5ac';
+// prettier-ignore
+(node/*: any*/).hash = '8a0cc7ceb40d5bda718ef669a035f5ac';
+
 export default node;

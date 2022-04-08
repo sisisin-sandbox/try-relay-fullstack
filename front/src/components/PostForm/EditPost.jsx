@@ -1,9 +1,11 @@
-import React from 'react';
-import { ConnectionHandler, graphql, PreloadedQuery, useMutation, usePreloadedQuery } from 'react-relay';
-import { useNavigate, useParams } from 'react-router-dom';
-import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
-import { EditPostMutation } from './__generated__/EditPostMutation.graphql';
-import { EditPostQuery } from './__generated__/EditPostQuery.graphql';
+// @flow
+
+import * as React from 'react';
+import { ConnectionHandler, graphql, type PreloadedQuery, useMutation, usePreloadedQuery } from 'react-relay';
+import { useNavigate, useParams } from "react-router-dom";
+import GQLQueryLoader, { type GenerateQueryLoaderProps } from '../Loader';
+import { type EditPostMutation } from './__generated__/EditPostMutation.graphql';
+import { type EditPostQuery } from './__generated__/EditPostQuery.graphql';
 
 const queryOperation = graphql`
   query EditPostQuery($id: ID!) {
@@ -39,10 +41,10 @@ const mutationOperation = graphql`
 type Props = GenerateQueryLoaderProps<EditPostQuery>;
 const Content = ({ refresh, queryRef }: Props) => {
   const data = usePreloadedQuery(queryOperation, queryRef);
-  const titleRef = React.useRef<HTMLInputElement>(null);
-  const bodyRef = React.useRef<HTMLInputElement>(null);
+  const titleRef = React.useRef(null);
+  const bodyRef = React.useRef(null);
   const navigate = useNavigate();
-  const [commit, isInFlight] = useMutation<EditPostMutation>(mutationOperation);
+  const [commit, isInFlight] = useMutation(mutationOperation);
 
   if (data.postById == null) {
     return null;
@@ -86,7 +88,7 @@ const Content = ({ refresh, queryRef }: Props) => {
   );
 };
 
-export function EditPost() {
+export const EditPost: React.AbstractComponent<{}> = () => {
   const { id } = useParams();
   if (id == null) {
     return <>'No post id'</>;
@@ -99,4 +101,4 @@ export function EditPost() {
       render={(queryRef: PreloadedQuery<EditPostQuery>, refresh) => <Content queryRef={queryRef} refresh={refresh} />}
     ></GQLQueryLoader>
   );
-}
+};

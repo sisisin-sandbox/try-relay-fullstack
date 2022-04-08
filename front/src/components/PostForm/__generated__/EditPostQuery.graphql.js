@@ -1,30 +1,34 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
-export type PostQueryVariables = {
-    id: string;
-};
-export type PostQueryResponse = {
-    readonly postById: {
-        readonly id: string;
-        readonly postId: string;
-        readonly userId: string;
-        readonly title: string;
-        readonly body: string;
-    } | null;
-};
-export type PostQuery = {
-    readonly response: PostQueryResponse;
-    readonly variables: PostQueryVariables;
-};
-
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
+export type EditPostQueryVariables = {|
+  id: string
+|};
+export type EditPostQueryResponse = {|
+  +postById: ?{|
+    +id: string,
+    +postId: string,
+    +userId: string,
+    +title: string,
+    +body: string,
+  |}
+|};
+export type EditPostQuery = {|
+  variables: EditPostQueryVariables,
+  response: EditPostQueryResponse,
+|};
+*/
 
 
 /*
-query PostQuery(
+query EditPostQuery(
   $id: ID!
 ) {
   postById(id: $id) {
@@ -37,7 +41,7 @@ query PostQuery(
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = [
   {
     "defaultValue": null,
@@ -104,7 +108,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -113,18 +117,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "47dad6a66ec2db026b9f049306ae6051",
+    "cacheID": "f6ec7fe3400dd6ac9007b0cc281e3120",
     "id": null,
     "metadata": {},
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "operationKind": "query",
-    "text": "query PostQuery(\n  $id: ID!\n) {\n  postById(id: $id) {\n    id\n    postId\n    userId\n    title\n    body\n  }\n}\n"
+    "text": "query EditPostQuery(\n  $id: ID!\n) {\n  postById(id: $id) {\n    id\n    postId\n    userId\n    title\n    body\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b8ef9f09739ce7eb19f6474837060f12';
+// prettier-ignore
+(node/*: any*/).hash = 'c13fcf82fcff2836952f2d20c94d9fee';
+
 export default node;

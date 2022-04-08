@@ -1,23 +1,27 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
-export type AppQueryVariables = {
-    id: string;
-};
-export type AppQueryResponse = {
-    readonly user: {
-        readonly id: string;
-        readonly name: string;
-    } | null;
-};
-export type AppQuery = {
-    readonly response: AppQueryResponse;
-    readonly variables: AppQueryVariables;
-};
-
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
+export type AppQueryVariables = {|
+  id: string
+|};
+export type AppQueryResponse = {|
+  +user: ?{|
+    +id: string,
+    +name: string,
+  |}
+|};
+export type AppQuery = {|
+  variables: AppQueryVariables,
+  response: AppQueryResponse,
+|};
+*/
 
 
 /*
@@ -31,7 +35,7 @@ query AppQuery(
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = [
   {
     "defaultValue": null,
@@ -99,5 +103,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'a57b9bda33df261a13d7f43bbdcee0fa';
+// prettier-ignore
+(node/*: any*/).hash = 'a57b9bda33df261a13d7f43bbdcee0fa';
+
 export default node;

@@ -1,39 +1,43 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
-export type PostEditInput = {
-    body?: string | null | undefined;
-    id: string;
-    title?: string | null | undefined;
-};
-export type EditPostMutationVariables = {
-    input: PostEditInput;
-    connections: Array<string>;
-};
-export type EditPostMutationResponse = {
-    readonly postEdit: {
-        readonly post: {
-            readonly id: string;
-            readonly postId: string;
-            readonly userId: string;
-            readonly title: string;
-            readonly body: string;
-        };
-        readonly postEdge: {
-            readonly node: {
-                readonly id: string;
-            };
-        };
-    } | null;
-};
-export type EditPostMutation = {
-    readonly response: EditPostMutationResponse;
-    readonly variables: EditPostMutationVariables;
-};
-
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
+export type PostEditInput = {|
+  body?: ?string,
+  id: string,
+  title?: ?string,
+|};
+export type EditPostMutationVariables = {|
+  input: PostEditInput,
+  connections: $ReadOnlyArray<string>,
+|};
+export type EditPostMutationResponse = {|
+  +postEdit: ?{|
+    +post: {|
+      +id: string,
+      +postId: string,
+      +userId: string,
+      +title: string,
+      +body: string,
+    |},
+    +postEdge: {|
+      +node: {|
+        +id: string
+      |}
+    |},
+  |}
+|};
+export type EditPostMutation = {|
+  variables: EditPostMutationVariables,
+  response: EditPostMutationResponse,
+|};
+*/
 
 
 /*
@@ -57,7 +61,7 @@ mutation EditPostMutation(
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
@@ -222,5 +226,7 @@ return {
   }
 };
 })();
-(node as any).hash = '608fbeec46b3324d4e1325665da12141';
+// prettier-ignore
+(node/*: any*/).hash = '608fbeec46b3324d4e1325665da12141';
+
 export default node;

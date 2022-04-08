@@ -1,6 +1,7 @@
+// @flow
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './index.css';
 import { RelayEnvironmentProvider } from 'react-relay';
 import { relayEnvironment } from './RelayEnvironment';
 import { BrowserRouter } from 'react-router-dom';

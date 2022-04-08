@@ -1,19 +1,23 @@
-/* tslint:disable */
+/**
+ * @flow
+ */
+
 /* eslint-disable */
-// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+'use strict';
 
-import { FragmentRefs } from "relay-runtime";
-export type PostsQueryVariables = {};
-export type PostsQueryResponse = {
-    readonly " $fragmentRefs": FragmentRefs<"PostListFragment">;
-};
-export type PostsQuery = {
-    readonly response: PostsQueryResponse;
-    readonly variables: PostsQueryVariables;
-};
-
+/*::
+import type { ConcreteRequest } from 'relay-runtime';
+type PostListFragment$ref = any;
+export type PostsQueryVariables = {||};
+export type PostsQueryResponse = {|
+  +$fragmentRefs: PostListFragment$ref
+|};
+export type PostsQuery = {|
+  variables: PostsQueryVariables,
+  response: PostsQueryResponse,
+|};
+*/
 
 
 /*
@@ -42,7 +46,7 @@ fragment PostListFragment on Query {
 }
 */
 
-const node: ConcreteRequest = (function(){
+const node/*: ConcreteRequest*/ = (function(){
 var v0 = [
   {
     "kind": "Literal",
@@ -200,5 +204,7 @@ return {
   }
 };
 })();
-(node as any).hash = '373dbec9b83ffa4a019220874c782ffe';
+// prettier-ignore
+(node/*: any*/).hash = '373dbec9b83ffa4a019220874c782ffe';
+
 export default node;

@@ -1,12 +1,15 @@
+// @flow
+import * as React from 'react';
+
 import { graphql } from 'react-relay';
 import { ConnectionHandler, useFragment, useMutation } from 'react-relay/hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { PostListFragment$key } from './__generated__/PostListFragment.graphql';
-import { PostListMutation } from './__generated__/PostListMutation.graphql';
+import { type PostListFragment$key } from './__generated__/PostListFragment.graphql';
+import { type PostListMutation } from './__generated__/PostListMutation.graphql';
 
 const operation = graphql`
   fragment PostListFragment on Query
-  @argumentDefinitions(first: { type: "Int", defaultValue: 30 }, after: { type: "String" }) {
+    @argumentDefinitions(first: { type: "Int", defaultValue: 30 }, after: { type: "String" }) {
     posts(first: $first) @connection(key: "PostList_posts") {
       edges {
         node {
@@ -30,7 +33,7 @@ const deleteOperation = graphql`
 `;
 
 type Props = {
-  queryRef: PostListFragment$key;
+  queryRef: PostListFragment$key,
 };
 
 const DeleteButton = ({ postId }: { postId: string }) => {
@@ -49,7 +52,7 @@ const DeleteButton = ({ postId }: { postId: string }) => {
   );
 };
 
-export const PostList = ({ queryRef }: Props) => {
+export const PostList: React.AbstractComponent<Props> = ({ queryRef }) => {
   const data = useFragment(operation, queryRef);
   const navigate = useNavigate();
   const navigateEdit = (id: string) => () => {
