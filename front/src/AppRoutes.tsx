@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ErrorInfo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { App } from './components/App/App';
 import { Links } from './components/Links';
@@ -13,6 +13,11 @@ class Boundary extends React.Component {
 
   static getDerivedStateFromError(error: Error) {
     return { error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.log(error);
+    console.log(errorInfo);
   }
 
   render() {

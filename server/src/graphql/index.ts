@@ -1,4 +1,4 @@
-import { ApolloServer, ExpressContext, gql } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError, ExpressContext, gql } from 'apollo-server-express';
 import { buildSubgraphSchema, GraphQLSchemaModule } from '@apollo/federation';
 import { fromGlobalId, toGlobalId } from 'graphql-relay';
 import { postDao, User, userDao } from './dao';
@@ -10,7 +10,7 @@ type SchemaModule = {
   resolvers?: Resolvers<AppContext>;
 };
 
-const base: SchemaModule = {
+const common: SchemaModule = {
   typeDefs: gql`
     type Query
     type Mutation
@@ -24,6 +24,10 @@ const base: SchemaModule = {
 
     interface Node {
       id: ID!
+    }
+    interface UserError {
+      message: String!
+      field: String!
     }
   `,
 };
@@ -114,14 +118,15 @@ const postQuery: SchemaModule = {
     }
 
     extend type Query {
-      postById(postId: String!): Post
+      postById(id: ID!): Post
       posts(first: Int! = 30): PostConnection!
     }
   `,
   resolvers: {
     Query: {
       postById: async (source, args, context, info) => {
-        const post = await postDao.findById(args.postId);
+        const postId = fromGlobalId(args.id).id;
+        const post = await postDao.findById(postId);
         return { ...post, postId: post.id, id: toGlobalId('Post', post.id) };
       },
       posts: async (source, args, context, info) => {
@@ -153,8 +158,25 @@ const postMutation: SchemaModule = {
       body: String!
     }
     type PostCreatePayload {
+      result: PostCreateSucceededResult
+      userErrors: [PostCreateError!]!
+    }
+
+    type PostCreateSucceededResult {
       post: Post!
       postEdge: PostEdge!
+    }
+
+    union PostCreateError = TitleNotExist | ProhibitedWordsExist
+
+    type TitleNotExist implements UserError {
+      message: String!
+      field: String!
+    }
+    type ProhibitedWordsExist implements UserError {
+      message: String!
+      field: String!
+      words: [String!]!
     }
 
     input PostDeleteInput {
@@ -178,16 +200,19 @@ const postMutation: SchemaModule = {
     Mutation: {
       postCreate: async (source, args, context, info) => {
         if (context.sessionUser == null) {
-          throw new Error('Not authenticated');
+          throw new AuthenticationError('Not authenticated');
         }
         const postFromDB = await postDao.create(context.sessionUser.id, args.input.title, args.input.body);
         const post = { ...postFromDB, postId: postFromDB.id, id: toGlobalId('Post', postFromDB.id) };
         return {
-          post,
-          postEdge: {
-            cursor: post.id,
-            node: post,
+          result: {
+            post,
+            postEdge: {
+              cursor: post.id,
+              node: post,
+            },
           },
+          userErrors: [],
         };
       },
       postDelete: async (source, args, context, info) => {
@@ -216,7 +241,7 @@ const postMutation: SchemaModule = {
   },
 };
 
-const schemaModules: SchemaModule[] = [base, nodeQuery, userQuery, userMutation, postQuery, postMutation];
+const schemaModules: SchemaModule[] = [common, nodeQuery, userQuery, userMutation, postQuery, postMutation];
 
 type AppContext = ExpressContext & { sessionUser: User | null };
 export const createServer = async () => {

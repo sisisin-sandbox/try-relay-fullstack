@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type PostQueryVariables = {
+export type EditPostQueryVariables = {
     id: string;
 };
-export type PostQueryResponse = {
+export type EditPostQueryResponse = {
     readonly postById: {
         readonly id: string;
         readonly postId: string;
@@ -16,15 +16,15 @@ export type PostQueryResponse = {
         readonly body: string;
     } | null;
 };
-export type PostQuery = {
-    readonly response: PostQueryResponse;
-    readonly variables: PostQueryVariables;
+export type EditPostQuery = {
+    readonly response: EditPostQueryResponse;
+    readonly variables: EditPostQueryVariables;
 };
 
 
 
 /*
-query PostQuery(
+query EditPostQuery(
   $id: ID!
 ) {
   postById(id: $id) {
@@ -104,7 +104,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -113,18 +113,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "47dad6a66ec2db026b9f049306ae6051",
+    "cacheID": "f6ec7fe3400dd6ac9007b0cc281e3120",
     "id": null,
     "metadata": {},
-    "name": "PostQuery",
+    "name": "EditPostQuery",
     "operationKind": "query",
-    "text": "query PostQuery(\n  $id: ID!\n) {\n  postById(id: $id) {\n    id\n    postId\n    userId\n    title\n    body\n  }\n}\n"
+    "text": "query EditPostQuery(\n  $id: ID!\n) {\n  postById(id: $id) {\n    id\n    postId\n    userId\n    title\n    body\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b8ef9f09739ce7eb19f6474837060f12';
+(node as any).hash = 'c13fcf82fcff2836952f2d20c94d9fee';
 export default node;

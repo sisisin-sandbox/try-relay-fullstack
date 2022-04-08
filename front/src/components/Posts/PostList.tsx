@@ -65,7 +65,7 @@ export const PostList = ({ queryRef }: Props) => {
             const { node } = edge;
             return (
               <li key={node.id}>
-                id: {node.id} postId: {node.postId} <Link to={`/posts/${node.postId}`}>title: {node.title}</Link>
+                id: {node.id} postId: {node.postId} <Link to={`/posts/${node.id}`}>title: {node.title}</Link>
                 <button onClick={navigateEdit(node.id)}>edit</button> <DeleteButton postId={node.postId}></DeleteButton>
               </li>
             );

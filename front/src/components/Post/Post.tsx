@@ -5,8 +5,8 @@ import GQLQueryLoader, { GenerateQueryLoaderProps } from '../Loader';
 import { PostQuery } from './__generated__/PostQuery.graphql';
 
 const operation = graphql`
-  query PostQuery($postId: String!) {
-    postById(postId: $postId) {
+  query PostQuery($id: ID!) {
+    postById(id: $id) {
       id
       postId
       userId
@@ -39,7 +39,7 @@ export function Post() {
   }
   return (
     <GQLQueryLoader
-      variables={{ postId: params.id }}
+      variables={{ id: params.id }}
       query={operation}
       render={(queryRef: PreloadedQuery<PostQuery>, refresh) => <Content queryRef={queryRef} refresh={refresh} />}
     ></GQLQueryLoader>

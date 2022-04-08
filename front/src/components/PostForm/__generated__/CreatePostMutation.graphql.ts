@@ -14,18 +14,20 @@ export type CreatePostMutationVariables = {
 };
 export type CreatePostMutationResponse = {
     readonly postCreate: {
-        readonly post: {
-            readonly id: string;
-            readonly postId: string;
-            readonly userId: string;
-            readonly title: string;
-            readonly body: string;
-        };
-        readonly postEdge: {
-            readonly node: {
+        readonly result: {
+            readonly post: {
                 readonly id: string;
+                readonly postId: string;
+                readonly userId: string;
+                readonly title: string;
+                readonly body: string;
             };
-        };
+            readonly postEdge: {
+                readonly node: {
+                    readonly id: string;
+                };
+            };
+        } | null;
     } | null;
 };
 export type CreatePostMutation = {
@@ -40,16 +42,18 @@ mutation CreatePostMutation(
   $input: PostCreateInput!
 ) {
   postCreate(input: $input) {
-    post {
-      id
-      postId
-      userId
-      title
-      body
-    }
-    postEdge {
-      node {
+    result {
+      post {
         id
+        postId
+        userId
+        title
+        body
+      }
+      postEdge {
+        node {
+          id
+        }
       }
     }
   }
@@ -162,8 +166,19 @@ return {
         "name": "postCreate",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
-          (v5/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "PostCreateSucceededResult",
+            "kind": "LinkedField",
+            "name": "result",
+            "plural": false,
+            "selections": [
+              (v4/*: any*/),
+              (v5/*: any*/)
+            ],
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
@@ -188,23 +203,34 @@ return {
         "name": "postCreate",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
-          (v5/*: any*/),
           {
             "alias": null,
             "args": null,
-            "filters": null,
-            "handle": "appendEdge",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "postEdge",
-            "handleArgs": [
+            "concreteType": "PostCreateSucceededResult",
+            "kind": "LinkedField",
+            "name": "result",
+            "plural": false,
+            "selections": [
+              (v4/*: any*/),
+              (v5/*: any*/),
               {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "appendEdge",
+                "key": "",
+                "kind": "LinkedHandle",
+                "name": "postEdge",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
               }
-            ]
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -212,14 +238,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a963363efc235a383d8a54e6d06e7757",
+    "cacheID": "6cc4d38d98df077ccfab4f04440262ec",
     "id": null,
     "metadata": {},
     "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    post {\n      id\n      postId\n      userId\n      title\n      body\n    }\n    postEdge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
+    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '90a64bc0af4bde96e4f754489b2c8d43';
+(node as any).hash = '11d62fd68c43db4babc1c830ec68cbc1';
 export default node;

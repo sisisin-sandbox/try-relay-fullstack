@@ -6,16 +6,18 @@ import { CreatePostMutation } from './__generated__/CreatePostMutation.graphql';
 const operation = graphql`
   mutation CreatePostMutation($input: PostCreateInput!, $connections: [ID!]!) {
     postCreate(input: $input) {
-      post {
-        id
-        postId
-        userId
-        title
-        body
-      }
-      postEdge @appendEdge(connections: $connections) {
-        node {
+      result {
+        post {
           id
+          postId
+          userId
+          title
+          body
+        }
+        postEdge @appendEdge(connections: $connections) {
+          node {
+            id
+          }
         }
       }
     }
@@ -45,7 +47,7 @@ export function CreatePost() {
         connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')],
       },
       onCompleted: (data) => {
-        if (data.postCreate == null) {
+        if (data.postCreate?.result == null) {
           console.error('postCreate is null');
           return;
         }
