@@ -11,6 +11,8 @@ directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
 
 directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
 
+directive @lintErrorPayloadSchemaDefinition on UNION
+
 scalar _FieldSet
 
 type Mutation {
@@ -44,7 +46,7 @@ type PostConnection {
   pageInfo: PageInfo!
 }
 
-union PostCreateError = PostCreateProhibitedWordsExist | PostCreateTitleDoesNotExist
+union PostCreateError @lintErrorPayloadSchemaDefinition = PostCreateProhibitedWordsExist | PostCreateTitleDoesNotExist
 
 enum PostCreateErrorCode {
   PROHIBITED_WORDS_EXIST
@@ -61,8 +63,8 @@ type PostCreatePayload {
   userErrors: [PostCreateError!]!
 }
 
-type PostCreateProhibitedWordsExist implements UserError {
-  code: PostCreateErrorCode!
+type PostCreateProhibitedWordsExist  {
+  code: String!
   field: String!
   message: String!
   words: [String!]!
@@ -106,7 +108,7 @@ type PostEditPayload {
 type Query {
   node(id: ID!): Node
   postById(id: ID!): Post
-  posts(first: Int! = 30): PostConnection!
+  posts(after: ID!, first: Int! = 30): PostConnection!
   user(id: ID!): User
 }
 

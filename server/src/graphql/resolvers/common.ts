@@ -6,6 +6,8 @@ const common: SchemaModule = {
     type Query
     type Mutation
 
+    directive @lintErrorPayloadSchemaDefinition on UNION
+
     type PageInfo {
       hasNextPage: Boolean!
       hasPreviousPage: Boolean!

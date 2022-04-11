@@ -158,6 +158,7 @@ export type QueryPostByIdArgs = {
 
 
 export type QueryPostsArgs = {
+  after: Scalars['ID'];
   first?: Scalars['Int'];
 };
 
@@ -308,6 +309,10 @@ export type ResolversParentTypes = ResolversObject<{
   UserError: ResolversParentTypes['PostCreateProhibitedWordsExist'] | ResolversParentTypes['PostCreateTitleDoesNotExist'];
 }>;
 
+export type LintErrorPayloadSchemaDefinitionDirectiveArgs = { };
+
+export type LintErrorPayloadSchemaDefinitionDirectiveResolver<Result, Parent, ContextType = any, Args = LintErrorPayloadSchemaDefinitionDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   postCreate?: Resolver<Maybe<ResolversTypes['PostCreatePayload']>, ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete?: Resolver<Maybe<ResolversTypes['PostDeletePayload']>, ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'input'>>;
@@ -394,7 +399,7 @@ export type PostEditPayloadResolvers<ContextType = any, ParentType extends Resol
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   postById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostByIdArgs, 'id'>>;
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'after' | 'first'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
@@ -436,3 +441,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   UserError?: UserErrorResolvers<ContextType>;
 }>;
 
+export type DirectiveResolvers<ContextType = any> = ResolversObject<{
+  lintErrorPayloadSchemaDefinition?: LintErrorPayloadSchemaDefinitionDirectiveResolver<any, any, ContextType>;
+}>;

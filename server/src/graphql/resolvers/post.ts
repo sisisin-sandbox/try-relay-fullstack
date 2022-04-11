@@ -26,7 +26,7 @@ const postQuery: SchemaModule = {
 
     extend type Query {
       postById(id: ID!): Post
-      posts(first: Int! = 30): PostConnection!
+      posts(first: Int! = 30, after: ID!): PostConnection!
     }
   `,
   resolvers: {
@@ -69,7 +69,9 @@ const postMutation: SchemaModule = {
       userErrors: [PostCreateError!]!
     }
 
-    union PostCreateError = PostCreateTitleDoesNotExist | PostCreateProhibitedWordsExist
+    union PostCreateError @lintErrorPayloadSchemaDefinition =
+        PostCreateTitleDoesNotExist
+      | PostCreateProhibitedWordsExist
     enum PostCreateErrorCode {
       TITLE_DOES_NOT_EXIST
       PROHIBITED_WORDS_EXIST
