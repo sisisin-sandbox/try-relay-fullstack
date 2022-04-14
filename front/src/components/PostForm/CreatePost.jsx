@@ -24,14 +24,14 @@ const operation = graphql`
         }
       }
       userErrors {
-        ... on UserError {
+        ... on PostCreateTitleDoesNotExist {
           __typename
           message
-        }
-        ... on PostCreateTitleDoesNotExist {
           code
         }
         ... on PostCreateProhibitedWordsExist {
+          __typename
+          message
           code
           words
         }
@@ -40,12 +40,15 @@ const operation = graphql`
   }
 `;
 
+type ErrorMessageKey = 'title' | 'body' | 'other';
+type ErrorMessage = { [key: ErrorMessageKey]: string[] };
+
 export const CreatePost: React.AbstractComponent<{}> = () => {
   const titleRef = React.useRef<HTMLInputElement | null>(null);
   const bodyRef = React.useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const [commit, isInFlight] = useMutation<CreatePostMutation>(operation);
-  const [errorResult, setErrorResult] = React.useState<{ [key: string]: string[] }>({});
+  const [errorResult, setErrorResult] = React.useState<ErrorMessage>({});
 
   const submit = () => {
     if (isInFlight) return;
@@ -58,42 +61,34 @@ export const CreatePost: React.AbstractComponent<{}> = () => {
         input: { title, body },
         connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')],
       },
+      optimisticResponse: ({}: $FlowFixMe),
       onCompleted: (data) => {
-        const errorMessages: { [key: string]: string[] } = {};
+        const errorMessages: ErrorMessage = {};
         (data.postCreate?.userErrors ?? []).forEach((err) => {
-          if (err.__typename === 'PostCreateTitleDoesNotExist') {
-            const {
-              code,
-              message,
-            }: {
-              +message: string,
-              +code: PostCreateErrorCode,
-            } = (err: any);
+          switch (err.__typename) {
+            case 'PostCreateTitleDoesNotExist': {
+              const { code, message } = err;
 
-            if (errorMessages.title == null) errorMessages.title = [];
-            errorMessages.title.push(message);
-          }
+              if (errorMessages.title == null) errorMessages.title = [];
+              errorMessages.title.push(message);
+              break;
+            }
+            case 'PostCreateProhibitedWordsExist': {
+              const { code, message, words } = err;
 
-          if (err.__typename === 'PostCreateProhibitedWordsExist') {
-            const {
-              code,
-              message,
-              words,
-            }: {
-              +message: string,
-              +code: PostCreateErrorCode,
-              +words: string[],
-            } = (err: any);
-
-            if (errorMessages.title == null) errorMessages.title = [];
-            errorMessages.title.push(message);
+              if (errorMessages.title == null) errorMessages.title = [];
+              errorMessages.title.push(message);
+              break;
+            }
+            default: {
+              if (errorMessages.other == null) errorMessages.other = [];
+              errorMessages.other.push('Unknown Error');
+              break;
+            }
           }
         }, {});
 
-        if (Object.keys(errorMessages).length > 0) {
-          setErrorResult(errorMessages);
-          return;
-        }
+        setErrorResult(errorMessages);
 
         navigate(`/posts`);
         // navigate(`/posts/${data.postCreate.post.postId}`);
@@ -114,7 +109,7 @@ export const CreatePost: React.AbstractComponent<{}> = () => {
       <div>
         body: <input type="text" name="body" ref={bodyRef} />
       </div>
-      {errorResult.something?.map((error, i) => (
+      {errorResult.other?.map((error, i) => (
         <span key={i} style={{ color: 'red' }}>
           {error}
         </span>
