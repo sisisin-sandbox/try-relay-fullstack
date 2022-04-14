@@ -63,9 +63,8 @@ type PostCreatePayload {
   userErrors: [PostCreateError!]!
 }
 
-type PostCreateProhibitedWordsExist  {
-  code: String!
-  field: String!
+type PostCreateProhibitedWordsExist implements UserError {
+  code: PostCreateErrorCode!
   message: String!
   words: [String!]!
 }
@@ -77,7 +76,6 @@ type PostCreateSucceededResult {
 
 type PostCreateTitleDoesNotExist implements UserError {
   code: PostCreateErrorCode!
-  field: String!
   message: String!
 }
 
@@ -108,7 +106,7 @@ type PostEditPayload {
 type Query {
   node(id: ID!): Node
   postById(id: ID!): Post
-  posts(after: ID!, first: Int! = 30): PostConnection!
+  posts(after: ID, first: Int! = 30): PostConnection!
   user(id: ID!): User
 }
 
@@ -123,6 +121,5 @@ type UserCreatePayload {
 }
 
 interface UserError {
-  field: String!
   message: String!
 }

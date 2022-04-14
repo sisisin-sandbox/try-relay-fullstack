@@ -27,7 +27,6 @@ const operation = graphql`
         ... on UserError {
           __typename
           message
-          field
         }
         ... on PostCreateTitleDoesNotExist {
           code
@@ -64,34 +63,30 @@ export const CreatePost: React.AbstractComponent<{}> = () => {
         (data.postCreate?.userErrors ?? []).forEach((err) => {
           if (err.__typename === 'PostCreateTitleDoesNotExist') {
             const {
-              field,
               code,
               message,
             }: {
               +message: string,
-              +field: string,
               +code: PostCreateErrorCode,
             } = (err: any);
 
-            if (errorMessages[field] == null) errorMessages[field] = [];
-            errorMessages[field].push(message);
+            if (errorMessages.title == null) errorMessages.title = [];
+            errorMessages.title.push(message);
           }
 
           if (err.__typename === 'PostCreateProhibitedWordsExist') {
             const {
-              field,
               code,
               message,
               words,
             }: {
               +message: string,
-              +field: string,
               +code: PostCreateErrorCode,
               +words: string[],
             } = (err: any);
 
-            if (errorMessages[field] == null) errorMessages[field] = [];
-            errorMessages[field].push(message);
+            if (errorMessages.title == null) errorMessages.title = [];
+            errorMessages.title.push(message);
           }
         }, {});
 
@@ -109,13 +104,20 @@ export const CreatePost: React.AbstractComponent<{}> = () => {
     <>
       <div>
         title: <input type="text" name="title" ref={titleRef} />
-        {errorResult.title && errorResult.title.map((error) => <span style={{ color: 'red' }}>{error}</span>)}
+        {errorResult.title &&
+          errorResult.title.map((error, i) => (
+            <span key={i} style={{ color: 'red' }}>
+              {error}
+            </span>
+          ))}
       </div>
       <div>
         body: <input type="text" name="body" ref={bodyRef} />
       </div>
-      {errorResult.something?.map((error) => (
-        <span style={{ color: 'red' }}>{error}</span>
+      {errorResult.something?.map((error, i) => (
+        <span key={i} style={{ color: 'red' }}>
+          {error}
+        </span>
       ))}
       <div>
         <button disabled={isInFlight} onClick={submit}>

@@ -36,7 +36,6 @@ export type CreatePostMutationResponse = {|
     +userErrors: $ReadOnlyArray<{|
       +__typename?: string,
       +message?: string,
-      +field?: string,
       +code?: PostCreateErrorCode,
       +words?: $ReadOnlyArray<string>,
     |}>,
@@ -74,7 +73,6 @@ mutation CreatePostMutation(
         __isUserError: __typename
         __typename
         message
-        field
       }
       ... on PostCreateTitleDoesNotExist {
         code
@@ -194,28 +192,21 @@ v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "field",
-  "storageKey": null
-},
-v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "code",
   "storageKey": null
 },
-v10 = {
+v9 = {
   "kind": "InlineFragment",
   "selections": [
-    (v9/*: any*/)
+    (v8/*: any*/)
   ],
   "type": "PostCreateTitleDoesNotExist",
   "abstractKey": null
 },
-v11 = {
+v10 = {
   "kind": "InlineFragment",
   "selections": [
-    (v9/*: any*/),
+    (v8/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -270,14 +261,13 @@ return {
                 "kind": "InlineFragment",
                 "selections": [
                   (v6/*: any*/),
-                  (v7/*: any*/),
-                  (v8/*: any*/)
+                  (v7/*: any*/)
                 ],
                 "type": "UserError",
                 "abstractKey": "__isUserError"
               },
-              (v10/*: any*/),
-              (v11/*: any*/)
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
             "storageKey": null
           }
@@ -346,14 +336,13 @@ return {
               {
                 "kind": "InlineFragment",
                 "selections": [
-                  (v7/*: any*/),
-                  (v8/*: any*/)
+                  (v7/*: any*/)
                 ],
                 "type": "UserError",
                 "abstractKey": "__isUserError"
               },
-              (v10/*: any*/),
-              (v11/*: any*/)
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
             "storageKey": null
           }
@@ -363,16 +352,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c2d2371870a0ac9ca3e1c999943ae974",
+    "cacheID": "209d4863f1276a91aee7ae9a621cfd10",
     "id": null,
     "metadata": {},
     "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n    userErrors {\n      __typename\n      ... on UserError {\n        __isUserError: __typename\n        __typename\n        message\n        field\n      }\n      ... on PostCreateTitleDoesNotExist {\n        code\n      }\n      ... on PostCreateProhibitedWordsExist {\n        code\n        words\n      }\n    }\n  }\n}\n"
+    "text": "mutation CreatePostMutation(\n  $input: PostCreateInput!\n) {\n  postCreate(input: $input) {\n    result {\n      post {\n        id\n        postId\n        userId\n        title\n        body\n      }\n      postEdge {\n        node {\n          id\n        }\n      }\n    }\n    userErrors {\n      __typename\n      ... on UserError {\n        __isUserError: __typename\n        __typename\n        message\n      }\n      ... on PostCreateTitleDoesNotExist {\n        code\n      }\n      ... on PostCreateProhibitedWordsExist {\n        code\n        words\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '2c945e5a4d145f4ac54e18e772b0b845';
+(node/*: any*/).hash = '409389f59e69a36a65000a0c3601f0c3';
 
 export default node;

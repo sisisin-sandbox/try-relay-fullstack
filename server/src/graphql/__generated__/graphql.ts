@@ -93,7 +93,6 @@ export type PostCreatePayload = {
 export type PostCreateProhibitedWordsExist = UserError & {
   __typename?: 'PostCreateProhibitedWordsExist';
   code: PostCreateErrorCode;
-  field: Scalars['String'];
   message: Scalars['String'];
   words: Array<Scalars['String']>;
 };
@@ -107,7 +106,6 @@ export type PostCreateSucceededResult = {
 export type PostCreateTitleDoesNotExist = UserError & {
   __typename?: 'PostCreateTitleDoesNotExist';
   code: PostCreateErrorCode;
-  field: Scalars['String'];
   message: Scalars['String'];
 };
 
@@ -158,7 +156,7 @@ export type QueryPostByIdArgs = {
 
 
 export type QueryPostsArgs = {
-  after: Scalars['ID'];
+  after?: InputMaybe<Scalars['ID']>;
   first?: Scalars['Int'];
 };
 
@@ -180,7 +178,6 @@ export type UserCreatePayload = {
 };
 
 export type UserError = {
-  field: Scalars['String'];
   message: Scalars['String'];
 };
 
@@ -360,7 +357,6 @@ export type PostCreatePayloadResolvers<ContextType = any, ParentType extends Res
 
 export type PostCreateProhibitedWordsExistResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostCreateProhibitedWordsExist'] = ResolversParentTypes['PostCreateProhibitedWordsExist']> = ResolversObject<{
   code?: Resolver<ResolversTypes['PostCreateErrorCode'], ParentType, ContextType>;
-  field?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   words?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -374,7 +370,6 @@ export type PostCreateSucceededResultResolvers<ContextType = any, ParentType ext
 
 export type PostCreateTitleDoesNotExistResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostCreateTitleDoesNotExist'] = ResolversParentTypes['PostCreateTitleDoesNotExist']> = ResolversObject<{
   code?: Resolver<ResolversTypes['PostCreateErrorCode'], ParentType, ContextType>;
-  field?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -399,7 +394,7 @@ export type PostEditPayloadResolvers<ContextType = any, ParentType extends Resol
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   postById?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostByIdArgs, 'id'>>;
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'after' | 'first'>>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
@@ -417,7 +412,6 @@ export type UserCreatePayloadResolvers<ContextType = any, ParentType extends Res
 
 export type UserErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserError'] = ResolversParentTypes['UserError']> = ResolversObject<{
   __resolveType: TypeResolveFn<'PostCreateProhibitedWordsExist' | 'PostCreateTitleDoesNotExist', ParentType, ContextType>;
-  field?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 

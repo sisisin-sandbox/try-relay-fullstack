@@ -26,7 +26,7 @@ const postQuery: SchemaModule = {
 
     extend type Query {
       postById(id: ID!): Post
-      posts(first: Int! = 30, after: ID!): PostConnection!
+      posts(first: Int! = 30, after: ID): PostConnection!
     }
   `,
   resolvers: {
@@ -79,13 +79,11 @@ const postMutation: SchemaModule = {
 
     type PostCreateTitleDoesNotExist implements UserError {
       message: String!
-      field: String!
 
       code: PostCreateErrorCode!
     }
     type PostCreateProhibitedWordsExist implements UserError {
       message: String!
-      field: String!
 
       code: PostCreateErrorCode!
       words: [String!]!
@@ -126,7 +124,6 @@ const postMutation: SchemaModule = {
             __typename: 'PostCreateTitleDoesNotExist',
             code: PostCreateErrorCode.TitleDoesNotExist,
             message: '`title` is required',
-            field: 'title',
           });
         }
 
@@ -135,7 +132,6 @@ const postMutation: SchemaModule = {
             __typename: 'PostCreateProhibitedWordsExist',
             code: PostCreateErrorCode.ProhibitedWordsExist,
             message: '`title` contains prohibited words',
-            field: 'title',
             words: ['prohibited'],
           });
         }

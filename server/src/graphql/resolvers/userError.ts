@@ -5,7 +5,6 @@ const userError: SchemaModule = {
   typeDefs: gql`
     interface UserError {
       message: String!
-      field: String!
     }
   `,
 };
