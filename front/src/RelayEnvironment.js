@@ -1,4 +1,8 @@
 // @flow
+import type { TaskScheduler } from 'relay-runtime/store/OperationExecutor';
+
+import { unstable_batchedUpdates } from 'react-dom';
+
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
 let userId = localStorage.getItem('userId') ?? '1';
@@ -32,8 +36,17 @@ async function fetchRelay(params: any, variables: any) {
   return fetchGraphql(params.text, variables);
 }
 
+const RelayScheduler: TaskScheduler = {
+  cancel: () => {},
+  schedule: (task) => {
+    unstable_batchedUpdates(task);
+    return '';
+  },
+};
+
 // Export a singleton instance of Relay Environment configured with our network function:
 export const relayEnvironment: Environment = new Environment({
   network: Network.create(fetchRelay),
   store: new Store(new RecordSource()),
+  scheduler: RelayScheduler,
 });

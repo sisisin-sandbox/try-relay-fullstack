@@ -52,7 +52,7 @@ const node/*: ReaderFragment*/ = {
     "connection": [
       {
         "count": "first",
-        "cursor": null,
+        "cursor": "after",
         "direction": "forward",
         "path": [
           "posts"
@@ -174,6 +174,6 @@ const node/*: ReaderFragment*/ = {
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = '8a0cc7ceb40d5bda718ef669a035f5ac';
+(node/*: any*/).hash = 'c1007f08f672e2fc4159c71104ed666c';
 
 export default node;

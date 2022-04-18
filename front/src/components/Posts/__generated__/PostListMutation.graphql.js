@@ -17,7 +17,8 @@ export type PostListMutationVariables = {|
 |};
 export type PostListMutationResponse = {|
   +postDelete: ?{|
-    +deletedPostId: string
+    +deletedPostId: string,
+    +_deletedPostId: string,
   |}
 |};
 export type PostListMutation = {|
@@ -33,6 +34,7 @@ mutation PostListMutation(
 ) {
   postDelete(input: $input) {
     deletedPostId
+    _deletedPostId: deletedPostId
   }
 }
 */
@@ -61,6 +63,13 @@ v3 = {
   "kind": "ScalarField",
   "name": "deletedPostId",
   "storageKey": null
+},
+v4 = {
+  "alias": "_deletedPostId",
+  "args": null,
+  "kind": "ScalarField",
+  "name": "deletedPostId",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -80,7 +89,8 @@ return {
         "name": "postDelete",
         "plural": false,
         "selections": [
-          (v3/*: any*/)
+          (v3/*: any*/),
+          (v4/*: any*/)
         ],
         "storageKey": null
       }
@@ -121,6 +131,16 @@ return {
                 "variableName": "connections"
               }
             ]
+          },
+          (v4/*: any*/),
+          {
+            "alias": "_deletedPostId",
+            "args": null,
+            "filters": null,
+            "handle": "deleteRecord",
+            "key": "",
+            "kind": "ScalarHandle",
+            "name": "deletedPostId"
           }
         ],
         "storageKey": null
@@ -128,16 +148,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7da2e6815c58751c71761cb2cd5e59a2",
+    "cacheID": "c8bf0e8079effb36d77b169b92fc93b6",
     "id": null,
     "metadata": {},
     "name": "PostListMutation",
     "operationKind": "mutation",
-    "text": "mutation PostListMutation(\n  $input: PostDeleteInput!\n) {\n  postDelete(input: $input) {\n    deletedPostId\n  }\n}\n"
+    "text": "mutation PostListMutation(\n  $input: PostDeleteInput!\n) {\n  postDelete(input: $input) {\n    deletedPostId\n    _deletedPostId: deletedPostId\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '1efd824699df560ee21238ed4a42b63d';
+(node/*: any*/).hash = '201177986dcc148b46e9237a6634b3d6';
 
 export default node;

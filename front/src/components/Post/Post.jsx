@@ -1,10 +1,10 @@
 // @flow
-import * as React from 'react'
+import * as React from 'react';
 
 import { graphql } from 'react-relay';
-import {type PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
+import { type PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
 import { useParams } from 'react-router-dom';
-import GQLQueryLoader, {type GenerateQueryLoaderProps } from '../Loader';
+import GQLQueryLoader, { type GenerateQueryLoaderProps } from '../Loader';
 import { type PostQuery } from './__generated__/PostQuery.graphql';
 
 const operation = graphql`
@@ -24,7 +24,7 @@ const Content = ({ refresh, queryRef }: Props) => {
   const data = usePreloadedQuery(operation, queryRef);
 
   if (data.postById == null) {
-    return null;
+    return <div>not found</div>;
   }
   const post = data.postById;
   return (
@@ -35,7 +35,7 @@ const Content = ({ refresh, queryRef }: Props) => {
   );
 };
 
-export const Post: React.AbstractComponent<{}> = ()=> {
+export const Post: React.AbstractComponent<{}> = () => {
   const params = useParams();
   if (params.id == null) {
     return <>'No post id'</>;
@@ -47,4 +47,4 @@ export const Post: React.AbstractComponent<{}> = ()=> {
       render={(queryRef: PreloadedQuery<PostQuery>, refresh) => <Content queryRef={queryRef} refresh={refresh} />}
     ></GQLQueryLoader>
   );
-}
+};

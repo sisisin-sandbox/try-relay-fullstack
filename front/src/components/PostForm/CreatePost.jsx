@@ -61,7 +61,6 @@ export const CreatePost: React.AbstractComponent<{}> = () => {
         input: { title, body },
         connections: [ConnectionHandler.getConnectionID('root', 'PostList_posts')],
       },
-      optimisticResponse: ({}: $FlowFixMe),
       onCompleted: (data) => {
         const errorMessages: ErrorMessage = {};
         (data.postCreate?.userErrors ?? []).forEach((err) => {
